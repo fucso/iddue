@@ -1,0 +1,25 @@
+# create オーダーシートテンプレート
+type: create
+parent_issue: null.    # Sub Issue の場合は親 Issue 番号を指定
+labels:
+  - "idd"
+  - "level:concrete"
+
+objective:
+  what: ""
+  why: ""
+  how: ""
+  prerequisites:        # 任意。前提条件がある場合のみ記述
+    - type: issue
+      number: 0
+      description: ""
+    - type: branch
+      name: ""
+    # type: note でその他の前提条件も記述可
+  detail:
+    - type: design
+      target: ""
+      change: ""
+    # ... 変更対象が複数ある場合は繰り返す
+  completion_criteria:
+    - ""
