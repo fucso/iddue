@@ -31,16 +31,18 @@ Issue 番号を指定して実装を開始します。独立した git worktree 
 
 ### PR をレビューする
 
-Issue に紐づいた PR を複数の観点（要件充足・設計・コード品質など）でレビューし、PR にコメントを投稿します。
+Issue 番号を指定して、紐づいた PR を複数の観点（要件充足・設計・コード品質など）でレビューし、PR にコメントを投稿します。
 
 ```
-/idd:pr:review
+/idd:pr:review {Issue番号}
+/idd:pr:review 42
 ```
 
 ### レビューフィードバックに対応する
 
-PR の未解決レビューコメントをタスクに整理し、修正を実装してプッシュします。
+Issue 番号を指定して、PR の未解決レビューコメントをタスクに整理し、修正を実装してプッシュします。
 
 ```
-/idd:pr:address-review-feedback
+/idd:pr:address-review-feedback {Issue番号}
+/idd:pr:address-review-feedback 42
 ```
