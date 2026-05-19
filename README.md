@@ -1,21 +1,46 @@
 # iddue
 
-## 概要
-
-- IDD (Issue-Driven Development) ワークフローを Claude Code で実行するためのスキルコレクション
-- GitHub Issues による開発管理と、Claude Code スキル（`/idd:*`）による自律実装を組み合わせたワークフローを提供する
-- 複数のプロジェクトリポジトリにコピーして共通利用できる設計
+GitHub Issues を起点とした開発ワークフローを Claude Code 上で実行するためのスキルコレクションです。Issue の起票から実装・PR 作成・レビュー対応まで、一連の開発フローをスキルとして提供します。
 
 ## セットアップ
 
-- **gh CLI**: GitHub との通信に使用。[インストール](https://cli.github.com/)後、`gh auth login` で認証する
-- **Claude Code CLI**: スキルの実行環境。[インストール](https://claude.ai/code)後、`.claude/` を配置したリポジトリで利用する
+以下の CLI ツールが必要です。
 
-## ユーザーが直接呼び出すスキル
+- [gh CLI](https://cli.github.com/) — GitHub との通信に使用します。インストール後、`gh auth login` で認証してください
+- [Claude Code CLI](https://claude.ai/code) — スキルの実行環境です。`.claude/` を利用したいリポジトリにコピーして使用します
 
-| スキル | 用途 |
-|--------|------|
-| `/idd:open` | Issue を対話形式で起票する（concrete / bug / problem / idea の 4 種別） |
-| `/idd:start {Issue番号}` | Issue を指定して worktree で実装を開始し PR を作成する |
-| `/idd:pr:review` | Issue に紐づいた PR を複数観点でレビューし、PR にコメントする |
-| `/idd:pr:address-review-feedback` | PR の未解決レビューコメントを実装して解消する |
+## スキル
+
+### Issue を起票する
+
+対話形式で Issue を起票します。問題・アイデア・バグ・具体的な改修など、どのような内容でも受け付けます。
+
+```
+/idd:open
+/idd:open 認証エラーが発生している
+```
+
+### 実装を開始する
+
+Issue 番号を指定して実装を開始します。独立した git worktree 環境でコードを実装し、PR を作成するまでを自動で行います。
+
+```
+/idd:start {Issue番号}
+/idd:start 42
+```
+
+### PR をレビューする
+
+Issue に紐づいた PR を複数の観点（要件充足・設計・コード品質など）でレビューし、PR にコメントを投稿します。
+
+```
+/idd:pr:review
+```
+
+### レビューフィードバックに対応する
+
+PR の未解決レビューコメントをタスクに整理し、修正を実装してプッシュします。
+
+```
+/idd:pr:address-review-feedback
+```
