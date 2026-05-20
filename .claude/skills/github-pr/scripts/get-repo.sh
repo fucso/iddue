@@ -7,4 +7,4 @@
 # Output: "owner/repo" 形式（例: enechange/emap-api）
 
 set -euo pipefail
-echo "${GITHUB_REPOSITORY:-$(gh repo view --json nameWithOwner --jq -r '.nameWithOwner')}"
+echo "${GITHUB_REPOSITORY:-$(gh repo view --json nameWithOwner --jq '.nameWithOwner')}"

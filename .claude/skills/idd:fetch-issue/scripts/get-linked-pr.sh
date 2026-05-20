@@ -20,10 +20,21 @@ gh api graphql -f query='
 query($name: String!, $owner: String!, $issue_number: Int!) {
   repository(name: $name, owner: $owner) {
     issue(number: $issue_number) {
-      timelineItems(first: 25, itemTypes: [CONNECTED_EVENT]) {
+      timelineItems(first: 25, itemTypes: [CONNECTED_EVENT, CROSS_REFERENCED_EVENT]) {
         nodes {
           ... on ConnectedEvent {
             subject {
+              ... on PullRequest {
+                number
+                headRefName
+                url
+                state
+              }
+            }
+          }
+          ... on CrossReferencedEvent {
+            willCloseTarget
+            source {
               ... on PullRequest {
                 number
                 headRefName
@@ -42,7 +53,12 @@ query($name: String!, $owner: String!, $issue_number: Int!) {
   -F issue_number="$ISSUE_NUMBER" \
   | jq '
     .data.repository.issue.timelineItems.nodes
-    | map(select(.subject != null) | .subject)
+    | map(
+        if .subject then .subject
+        elif (.willCloseTarget == true) and .source then .source
+        else null end
+      )
+    | map(select(. != null and .number != null))
     | first
     // null
     | if . then {number: .number, branch: .headRefName, url: .url, state: .state}
