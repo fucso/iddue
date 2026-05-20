@@ -1,8 +1,15 @@
 #!/bin/bash
-# PR のレビュースレッドを取得する
+# PR のレビュースレッドとレビュー本体を取得する
 #
 # Usage: ./get-review-feedback.sh <pr_number> [--resolved <true|false>] [--outdated <true|false>]
 # Defaults: --resolved false --outdated false
+#
+# 返却オブジェクトの type フィールド:
+#   "thread" - コード行に紐づくインラインスレッド (PullRequest.reviewThreads)
+#   "review" - PR Review 本体 (PullRequest.reviews, 非空 body のみ)
+#
+# --resolved / --outdated フィルターは "thread" にのみ適用される。
+# "review" は body が空でないものをすべて返す。
 
 set -e
 
@@ -49,6 +56,17 @@ gh api graphql \
               }
             }
           }
+          reviews(first: 100) {
+            nodes {
+              databaseId
+              url
+              state
+              body
+              author { login }
+              submittedAt
+              commit { oid }
+            }
+          }
         }
       }
     }
@@ -56,6 +74,20 @@ gh api graphql \
   -f owner="$OWNER" \
   -f repo="$REPO" \
   -F number="${PR_NUMBER}" \
-  --jq '.data.repository.pullRequest.reviewThreads.nodes' \
+  --jq '{threads: .data.repository.pullRequest.reviewThreads.nodes, reviews: .data.repository.pullRequest.reviews.nodes}' \
 | jq --argjson resolved "${RESOLVED}" --argjson outdated "${OUTDATED}" \
-  'map(select(.isResolved == $resolved and .isOutdated == $outdated))'
+  '
+    (
+      .threads
+      | map(select(.isResolved == $resolved and .isOutdated == $outdated))
+      | map(. + {type: "thread"})
+    )
+    +
+    (
+      .reviews
+      | map(select(.body != null and .body != ""))
+      | sort_by(.submittedAt)
+      | last
+      | if . then [. + {type: "review"}] else [] end
+    )
+  '
