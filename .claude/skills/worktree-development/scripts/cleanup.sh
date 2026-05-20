@@ -2,9 +2,9 @@
 # 作業環境をクリーンアップする
 #
 # Usage: ./cleanup.sh <environment_name>
-#   environment_name: 作業環境の識別名（例: idd/103）
+#   environment_name: 作業環境の識別名（例: iddue/103）
 #
-# Example: ./cleanup.sh idd/103
+# Example: ./cleanup.sh iddue/103
 
 set -e
 cd "$(git rev-parse --show-toplevel)"

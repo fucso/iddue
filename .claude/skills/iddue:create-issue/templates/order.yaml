@@ -1,0 +1,53 @@
+# iddue:create-issue オーダーシート スキーマ定義
+#
+# iddue:open:* スキルが作成し .iddue/orders/{YYYYMMDD-HHMMSS}-create.yaml に保存する。
+# iddue:create-issue スキルがこのファイルを読み込み、Issue を作成する。
+# 作成完了後、このファイルは自動的に削除される。
+#
+# ⚠️ 記載原則:
+#   各フィールドにはできるだけ詳細に情報を記載する。
+#   iddue:create-issue はここに書かれた内容を材料に Issue 本文を組み立てるため、
+#   省略・要約すると Issue の情報が薄くなる。収集したすべての情報を記録すること。
+
+type: create
+
+parent_issue: null  # 親 Issue 番号。なければ null
+
+labels:
+  - "iddue"
+  - "level:concrete"  # concrete | bug | idea | problem
+
+objective:
+  what: |
+    # 何を実現するか・変更するか（複数行可）
+  why: |
+    # なぜ必要か・背景と動機（複数行可）
+  how: |
+    # どのように実現するか・実装アプローチ（複数行可）
+    # 空の場合は省略可
+
+  prerequisites:  # 任意。前提条件のリスト（依存 Issue、ベースブランチなど）
+    # type: issue — 依存 Issue（完了していることが前提）
+    - type: issue
+      number: 0
+      description: "この Issue が完了していること"
+    # type: branch — ベースブランチ指定（デフォルトブランチ以外をベースにする場合）
+    - type: branch
+      name: "feature/xxx"
+    # type: note — その他の前提条件
+    - type: note
+      content: "その他の前提条件の説明"
+
+  detail:  # 任意。detail items のリスト
+    # type: design — 具体的な実装変更（ファイル・対象・変更内容）
+    - type: design
+      target: "app/path/to/file.rb"  # ファイルパス・クラス・メソッドなど
+      change: "変更内容の説明"
+
+    # type: spec — 実現したい内容・要件（実装が未確定、または概念的な記述）
+    - type: spec
+      content: "実現したい内容・要件の説明"
+
+  completion_criteria:  # 任意。完了条件のリスト
+    - "完了条件1"
+    - "完了条件2"

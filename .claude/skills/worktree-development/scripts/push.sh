@@ -2,10 +2,10 @@
 # 作業環境のコミットをリモートにプッシュする
 #
 # Usage: ./push.sh <environment_name> <branch>
-#   environment_name: 作業環境の識別名（例: idd/103）
+#   environment_name: 作業環境の識別名（例: iddue/103）
 #   branch: プッシュ先のブランチ名（origin/ プレフィックスは自動除去されます）
 #
-# Example: ./push.sh idd/103 feature/my-feature
+# Example: ./push.sh iddue/103 feature/my-feature
 #
 # 注意: detached HEAD でコミットした場合、worktree を削除するとコミットが
 #       到達不能になるため、必ずクリーンアップ前にこのスクリプトを実行してください。

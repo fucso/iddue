@@ -2,15 +2,15 @@
 # worktree 作業環境をセットアップする
 #
 # Usage: ./setup.sh <environment_name> <branch>
-#   environment_name: 作業環境の識別名（例: idd/103）、ブランチ名としても使用される
+#   environment_name: 作業環境の識別名（例: iddue/103）、ブランチ名としても使用される
 #   branch: ベースとなるブランチ名（origin/ プレフィックスは自動除去されます）
 #
 # ブランチの扱い:
 #   - environment_name と同名のブランチが存在しない場合: branch をベースに新規作成
 #   - environment_name と同名のブランチが既存の場合: そのブランチの最新コミットから開始
 #
-# Example: ./setup.sh idd/103 feature/my-feature
-# Example: ./setup.sh idd/103 origin/feature/my-feature  # origin/ は自動除去
+# Example: ./setup.sh iddue/103 feature/my-feature
+# Example: ./setup.sh iddue/103 origin/feature/my-feature  # origin/ は自動除去
 #
 # セットアップ後に .claude/worktree-hooks/post-setup.sh が存在すれば実行する。
 # フックの引数: <worktree_path>

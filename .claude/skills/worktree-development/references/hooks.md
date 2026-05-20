@@ -21,7 +21,7 @@
 worktree 内でコマンドを実行する方法を定義する。
 
 **引数:**
-- `$1` `worktree_path`: worktree のパス（例: `.worktree/idd/103`）
+- `$1` `worktree_path`: worktree のパス（例: `.worktree/iddue/103`）
 - `$2` `command`: 実行するコマンド
 
 **デフォルト動作:** `bash -c "cd {worktree_path} && {command}"`
@@ -42,7 +42,7 @@ docker compose exec -T web bash -c "cd ${WORKTREE_PATH} && ${COMMAND}"
 変更ファイルのリストを受け取り、どのファイルをテスト対象とするかはこのフックが決定する。
 
 **引数:**
-- `$1` `worktree_path`: worktree のパス（例: `.worktree/idd/103`）
+- `$1` `worktree_path`: worktree のパス（例: `.worktree/iddue/103`）
 - `$2` `changed_files`: worktree で変更したファイルのリスト（スペース区切り）
 
 **デフォルト動作:** スキップ（exit 0）
@@ -67,7 +67,7 @@ worktree 作成直後に行う初期化処理を定義する。
 環境ファイルのコピーや依存関係のインストールなどに使用する。
 
 **引数:**
-- `$1` `worktree_path`: worktree のパス（例: `.worktree/idd/103`）
+- `$1` `worktree_path`: worktree のパス（例: `.worktree/iddue/103`）
 
 **デフォルト動作:** 何もしない（exit 0）
 

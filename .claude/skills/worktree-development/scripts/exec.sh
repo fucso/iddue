@@ -2,13 +2,13 @@
 # 作業環境内で任意のコマンドを実行する
 #
 # Usage: ./exec.sh <environment_name> <command> [options...]
-#   environment_name: 作業環境の識別名（例: idd/103）
+#   environment_name: 作業環境の識別名（例: iddue/103）
 #   command: 実行するコマンド
 #   options: 任意のオプション（フックに透過される。例: --docker）
 #
 # Examples:
-#   ./exec.sh idd/103 "bundle exec rails runner 'puts User.count'" --docker
-#   ./exec.sh idd/103 "git diff --cached --name-only"
+#   ./exec.sh iddue/103 "bundle exec rails runner 'puts User.count'" --docker
+#   ./exec.sh iddue/103 "git diff --cached --name-only"
 #
 # .claude/worktree-hooks/exec.sh が存在すればそれを使用する。
 # フックの引数: <worktree_path> <command> [options...]

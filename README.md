@@ -16,8 +16,8 @@ GitHub Issues を起点とした開発ワークフローを Claude Code 上で�
 対話形式で Issue を起票します。問題・アイデア・バグ・具体的な改修など、どのような内容でも受け付けます。
 
 ```
-/idd:open
-/idd:open 認証エラーが発生している
+/iddue:open
+/iddue:open 認証エラーが発生している
 ```
 
 ### 実装を開始する
@@ -25,8 +25,8 @@ GitHub Issues を起点とした開発ワークフローを Claude Code 上で�
 Issue 番号を指定して実装を開始します。独立した git worktree 環境でコードを実装し、PR を作成するまでを自動で行います。
 
 ```
-/idd:start {Issue番号}
-/idd:start 42
+/iddue:start {Issue番号}
+/iddue:start 42
 ```
 
 ### PR をレビューする
@@ -34,8 +34,8 @@ Issue 番号を指定して実装を開始します。独立した git worktree 
 Issue 番号を指定して、紐づいた PR を複数の観点（要件充足・設計・コード品質など）でレビューし、PR にコメントを投稿します。
 
 ```
-/idd:pr:review {Issue番号}
-/idd:pr:review 42
+/iddue:pr:review {Issue番号}
+/iddue:pr:review 42
 ```
 
 ### レビューフィードバックに対応する
@@ -43,6 +43,6 @@ Issue 番号を指定して、紐づいた PR を複数の観点（要件充足�
 Issue 番号を指定して、PR の未解決レビューコメントをタスクに整理し、修正を実装してプッシュします。
 
 ```
-/idd:pr:address-review-feedback {Issue番号}
-/idd:pr:address-review-feedback 42
+/iddue:pr:address-review-feedback {Issue番号}
+/iddue:pr:address-review-feedback 42
 ```

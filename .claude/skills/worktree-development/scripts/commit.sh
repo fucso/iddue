@@ -2,13 +2,13 @@
 # 作業環境での変更をコミットする
 #
 # Usage: ./commit.sh <environment_name> <commit_message> [branch_name]
-#   environment_name: 作業環境の識別名（例: idd/103）
+#   environment_name: 作業環境の識別名（例: iddue/103）
 #   commit_message: コミットメッセージ
 #   branch_name: （オプション）新しいブランチ名。指定すると新しいブランチを作成してからコミット
 #
 # Examples:
-#   ./commit.sh idd/103 "[Issue#103] 機能実装"
-#   ./commit.sh idd/103 "[Issue#103] 機能実装" feature/new-branch
+#   ./commit.sh iddue/103 "[Issue#103] 機能実装"
+#   ./commit.sh iddue/103 "[Issue#103] 機能実装" feature/new-branch
 
 set -e
 cd "$(git rev-parse --show-toplevel)"
