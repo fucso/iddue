@@ -1,0 +1,17 @@
+{
+  "hooks": {
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/session-end-workflow-improvement.sh",
+            "async": true,
+            "timeout": 300,
+            "statusMessage": "ワークフロー改善を確認中..."
+          }
+        ]
+      }
+    ]
+  }
+}
