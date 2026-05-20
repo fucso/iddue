@@ -100,32 +100,32 @@ bash .claude/skills/worktree-development/scripts/setup.sh "iddue-review/{parent}
 **1. ベースブランチをマージ（--no-commit でコンフリクト状態を確認）**
 
 ```bash
-git -C .worktree/idd-review/{parent} merge origin/{pr_info.baseRefName} --no-commit --no-ff
+git -C .worktree/iddue-review/{parent} merge origin/{pr_info.baseRefName} --no-commit --no-ff
 ```
 
 **2. コンフリクトファイルの特定**
 
 ```bash
-git -C .worktree/idd-review/{parent} diff --name-only --diff-filter=U
+git -C .worktree/iddue-review/{parent} diff --name-only --diff-filter=U
 ```
 
 **3. 各コンフリクトファイルの解消**
 
-`idd:pr:review` の analyze-conflicts.sh を使って両側の差分を取得し、PR の Issue コンテキストと照合して解消方針を判断する：
+`github-pr` の analyze-conflicts.sh を使って両側の差分を取得し、PR の Issue コンテキストと照合して解消方針を判断する：
 
 ```bash
-bash .claude/skills/idd:pr:review/scripts/analyze-conflicts.sh \
+bash .claude/skills/github-pr/scripts/analyze-conflicts.sh \
   {pr_info.baseRefName} {pr_info.headRefName}
 ```
 
 `Read` ツールでコンフリクトマーカーを含むファイルを読み取り、`Edit` ツールで解消する。
-解消後、`git -C .worktree/idd-review/{parent} add {file}` でステージングする。
+解消後、`git -C .worktree/iddue-review/{parent} add {file}` でステージングする。
 
 **4. マージコミット**
 
 ```bash
 bash .claude/skills/worktree-development/scripts/commit.sh \
-  "idd-review/{parent}" \
+  "iddue-review/{parent}" \
   "fix: {pr_info.baseRefName} をマージしてコンフリクトを解消する"
 ```
 
