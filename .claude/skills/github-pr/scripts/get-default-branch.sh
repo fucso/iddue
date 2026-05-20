@@ -7,4 +7,4 @@
 # Output: デフォルトブランチ名（例: develop, main, master）
 
 set -euo pipefail
-echo "${GITHUB_DEFAULT_BRANCH:-$(gh repo view --json defaultBranchRef --jq -r '.defaultBranchRef.name')}"
+echo "${GITHUB_DEFAULT_BRANCH:-$(gh repo view --json defaultBranchRef --jq '.defaultBranchRef.name')}"
