@@ -2,12 +2,12 @@
 # 作業環境での品質チェックを実行する
 #
 # Usage: ./quality-check.sh <environment_name> [changed_files]
-#   environment_name: 作業環境の識別名（例: idd/103）
+#   environment_name: 作業環境の識別名（例: iddue/103）
 #   changed_files: worktree で変更したファイルのリスト（スペース区切り、省略可）
 #                  どのファイルをテスト対象とするかはリポジトリ固有フックが決定する
 #
 # Examples:
-#   ./quality-check.sh idd/103 "app/models/user.rb lib/foo.rb"
+#   ./quality-check.sh iddue/103 "app/models/user.rb lib/foo.rb"
 #
 # .claude/worktree-hooks/quality-check.sh が存在すればそれを使用する。
 # フックの引数: <worktree_path> <changed_files>

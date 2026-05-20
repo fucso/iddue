@@ -1,0 +1,21 @@
+# IDDUE ワークフロー ラベル定義
+# このファイルは iddue/scripts/add-label.sh から参照される
+labels:
+  - name: "iddue"
+    color: "0052CC"
+    description: "Issue-Driven Development"
+  - name: "level:concrete"
+    color: "5319E7"
+    description: "変更対象・実装内容が具体的に特定されている"
+  - name: "level:bug"
+    color: "D73A4A"
+    description: "再現手順・期待値・実際の動作が明確な不具合"
+  - name: "level:problem"
+    color: "E4E669"
+    description: "問題は明確だが対応方法が未定"
+  - name: "level:idea"
+    color: "A2EEEF"
+    description: "将来の機能追加・改修アイデア"
+  - name: "ready to implementation"
+    color: "0075CA"
+    description: "実装開始可能と判定された Issue"
