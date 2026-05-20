@@ -9,7 +9,7 @@
 #   "review" - PR Review 本体 (PullRequest.reviews, 非空 body のみ)
 #
 # --resolved / --outdated フィルターは "thread" にのみ適用される。
-# "review" は body が空でないものをすべて返す。
+# "review" は body が空でないもののうち最新の 1 件のみを返す。
 
 set -e
 
