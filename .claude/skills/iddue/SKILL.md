@@ -1,7 +1,7 @@
 ---
 name: iddue
 description: |
-  Issue-Driven Development（IDD）ワークフローの共通知識を提供する。
+  Issue-Driven Development（IDDUE）ワークフローの共通知識を提供する。
   GitHub Issues による開発管理と、docs/specs/ による仕様および意思決定の記録のドキュメンテーション、
   この2軸の連携による実装ワークフローの知識を集約する。
   以下の場合に使用:
@@ -11,7 +11,7 @@ description: |
 user-invocable: false
 ---
 
-# IDD (Issue-Driven Development) Skill
+# IDDUE (Issue-Driven Development) Skill
 
 GitHub Issues による開発管理と、`docs/specs/` による仕様および意思決定の記録のドキュメンテーション、2軸の連携による実装ワークフローの知識を提供する。
 
@@ -43,7 +43,7 @@ PR ↔ Issue リンクに委ねる：PR 本文に `Closes #NNN` を記述 → PR
 | [references/features.md](references/features.md) | スキル一覧・種別・呼び出し元・担当領域 |
 | [references/workflow.md](references/workflow.md) | 実装フロー・各コマンドの操作手順 |
 | [references/docs.md](references/docs.md) | ローカルドキュメント（docs/specs/）の目的・管理方針・更新ルール |
-| [references/hooks.md](references/hooks.md) | IDD フックスクリプト仕様（`.claude/iddue-hooks/` へのカスタマイズポイント） |
+| [references/hooks.md](references/hooks.md) | IDDUE フックスクリプト仕様（`.claude/iddue-hooks/` へのカスタマイズポイント） |
 
 ## 並列実装ワークフロー
 

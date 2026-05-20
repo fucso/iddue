@@ -1,7 +1,7 @@
 ---
 name: iddue:start
 description: |
-  IDD Issue を指定して git worktree で実装を開始し PR を作成する。
+  IDDUE Issue を指定して git worktree で実装を開始し PR を作成する。
   GitHub Issue からコンテキストを収集し、iddue:judging-ready-to-implementation で
   実装可能性を判定してから、worktree-development スキルで
   独立した worktree 環境で実装・品質チェック・PR 作成まで自動実行する。
@@ -11,7 +11,7 @@ disable-model-invocation: true
 
 # `/iddue:start` — Issue 実装開始
 
-IDD Issue を指定して、独立した git worktree 環境で実装を行い PR を作成する。
+IDDUE Issue を指定して、独立した git worktree 環境で実装を行い PR を作成する。
 任意の Issue を受け付け、実装可能性を判定してから実装に進む。
 
 ## スクリプト

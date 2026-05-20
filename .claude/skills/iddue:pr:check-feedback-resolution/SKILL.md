@@ -33,7 +33,7 @@ argument-hint: "{Issue 番号}"
 |-------------|--------|
 | **コメント後の差分** | `get-diff.sh`（`original_commit_oid` から `headRefOid` まで） |
 | **最新のコード全体** | worktree（`.worktree/iddue-review/{parent}/`）を `Read` で参照 |
-| **IDD Issue コンテキスト** | 親 Issue 本文・サブ Issue 本文（ある場合）・Issue YAML |
+| **IDDUE Issue コンテキスト** | 親 Issue 本文・サブ Issue 本文（ある場合）・Issue YAML |
 
 ---
 
@@ -61,7 +61,7 @@ Phase 3: 各スレッドの解決状況を個別チェック（コード変更�
 
 ## Phase 1: コンテキスト収集
 
-### 1.1 IDD Issue コンテキストの取得
+### 1.1 IDDUE Issue コンテキストの取得
 
 ```
 /iddue:fetch-issue {parent} force:true

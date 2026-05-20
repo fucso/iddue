@@ -1,4 +1,4 @@
-# IDD スキル一覧
+# IDDUE スキル一覧
 
 `iddue:` プリフィックスを持つスキルの役割・種別・呼び出し元の一覧。
 
@@ -8,7 +8,7 @@
 
 | スキル | 種別 | 呼び出し元 | 担当領域 |
 |--------|------|-----------|---------|
-| [`iddue`](#iddue) | 知識提供 | — | IDD ワークフロー共通知識 |
+| [`iddue`](#iddue) | 知識提供 | — | IDDUE ワークフロー共通知識 |
 | [`iddue:issue-yaml`](#iddissue-yaml) | 知識提供 | — | Issue YAML スキーマ・記述原則 |
 | [`iddue:open`](#iddopen) | コマンド（ユーザー起動） | ユーザー | 起票レベルの判定・`iddue:open:{level}` への委譲 |
 | [`iddue:open:concrete`](#iddopenconcrete) | コマンド（ユーザー起動 / 委譲） | ユーザー / `iddue:open` | 具体的な改修の要件検討・起票内容の決定 |
@@ -24,7 +24,7 @@
 | [`iddue:setup-orchestration`](#iddsetup-orchestration) | コマンド（ユーザー起動 / 委譲） | ユーザー / `iddue:open:concrete` | 並列実装準備（メイン Issue ブランチ・config.yaml・メイン Issue PR の作成・readiness チェック） |
 | [`iddue:start:orchestrate`](#iddstartorchestrate) | コマンド（委譲） | `iddue:start` | サブ Issue の並列ワーカーディスパッチ・監視・マージ |
 | [`iddue:start:worker`](#iddstartworker) | コマンド（自動起動） | `iddue:start:orchestrate`（`claude -p` サブプロセス） | サブ Issue 単体の worktree 実装・report.md 送信 |
-| [`iddue:pr:review`](#iddprreview) | コマンド（ユーザー起動） | ユーザー | IDD Issue に紐づいた PR を複数観点でレビューし、PR にコメントする |
+| [`iddue:pr:review`](#iddprreview) | コマンド（ユーザー起動） | ユーザー | IDDUE Issue に紐づいた PR を複数観点でレビューし、PR にコメントする |
 | [`iddue:pr:address-review-feedback`](#iddpraddress-review-feedback) | コマンド（ユーザー起動） | ユーザー | PR の未解決レビューコメントをタスクに整理して修正を実装・プッシュする |
 | [`iddue:pr:check-feedback-resolution`](#iddprcheck-feedback-resolution) | コマンド（内部） | `iddue:pr:review` | 未解決レビューコメントの解消確認・異議スレッドのユーザー議論・自動 resolve を行う |
 
@@ -35,7 +35,7 @@
 ### `iddue`
 
 - **種別:** 知識提供（`user-invocable: false`）
-- **担当領域:** IDD ワークフロー全体の共通知識を集約する。GitHub Issues による開発管理と `docs/specs/` による仕様ドキュメンテーション、2軸の連携ワークフローの知識・ルールを提供する。
+- **担当領域:** IDDUE ワークフロー全体の共通知識を集約する。GitHub Issues による開発管理と `docs/specs/` による仕様ドキュメンテーション、2軸の連携ワークフローの知識・ルールを提供する。
 
 ---
 
@@ -119,7 +119,7 @@
 ### `iddue:start`
 
 - **種別:** ワークフローコマンド（ユーザーが明示的に呼び出す）
-- **担当領域:** Issue 番号を受け取り、`iddue:fetch-issue` でコンテキスト収集 → `iddue:judging-ready-to-implementation` で実装可否判定 → `worktree-development` で独立した worktree 環境を準備 → コード実装・品質チェック → コミット・プッシュ → PR 作成まで一貫して自動実行する。IDD ワークフローの「実装」フェーズ全体のオーケストレーターに相当する。サブ Issue が存在する場合はユーザーに確認後 `iddue:start:orchestrate` へ委譲する。
+- **担当領域:** Issue 番号を受け取り、`iddue:fetch-issue` でコンテキスト収集 → `iddue:judging-ready-to-implementation` で実装可否判定 → `worktree-development` で独立した worktree 環境を準備 → コード実装・品質チェック → コミット・プッシュ → PR 作成まで一貫して自動実行する。IDDUE ワークフローの「実装」フェーズ全体のオーケストレーターに相当する。サブ Issue が存在する場合はユーザーに確認後 `iddue:start:orchestrate` へ委譲する。
 
 ---
 
@@ -147,7 +147,7 @@
 ### `iddue:pr:review`
 
 - **種別:** ワークフローコマンド（ユーザーが明示的に呼び出す）
-- **担当領域:** IDD Issue に紐づいた PR を複数観点でレビューする。最初に `iddue:pr:check-feedback-resolution` を呼び出して前回の未解決コメントを処理してから、worktree を作成してコード全体を参照しつつ、①完了状況（オーケストレーション PR のみ）②要件充足性 ③設計整合性 ④CI ステータス ⑤コード品質の 5 観点を順に評価する。CRITICAL が 1 件でも見つかれば `REQUEST_CHANGES` コメントを投稿して終了、全観点 OK なら `COMMENT` でレビュー OK を投稿して `iddue: review ok` ラベルを付与する。単独 Issue PR とオーケストレーション PR の両方に対応する。
+- **担当領域:** IDDUE Issue に紐づいた PR を複数観点でレビューする。最初に `iddue:pr:check-feedback-resolution` を呼び出して前回の未解決コメントを処理してから、worktree を作成してコード全体を参照しつつ、①完了状況（オーケストレーション PR のみ）②要件充足性 ③設計整合性 ④CI ステータス ⑤コード品質の 5 観点を順に評価する。CRITICAL が 1 件でも見つかれば `REQUEST_CHANGES` コメントを投稿して終了、全観点 OK なら `COMMENT` でレビュー OK を投稿して `iddue: review ok` ラベルを付与する。単独 Issue PR とオーケストレーション PR の両方に対応する。
 
 ---
 

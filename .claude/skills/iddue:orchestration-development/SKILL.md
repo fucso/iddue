@@ -1,7 +1,7 @@
 ---
 name: iddue:orchestration-development
 description: |
-  IDD における並列実装ワークフローの共通知識を提供する。
+  IDDUE における並列実装ワークフローの共通知識を提供する。
   サブ Issue の依存グラフに基づいたオーケストレーター/ワーカーパターンによる
   並列実装の全体像・設計方針・ファイル構造・スキルの役割分担を集約する。
   以下の場合に使用:
@@ -11,15 +11,15 @@ description: |
 user-invocable: false
 ---
 
-# IDD 並列実装ワークフロー（Orchestration Development）
+# IDDUE 並列実装ワークフロー（Orchestration Development）
 
-IDD において複数のサブ Issue を並列に実装するためのオーケストレーター/ワーカーパターンのワークフロー定義、知識。
+IDDUE において複数のサブ Issue を並列に実装するためのオーケストレーター/ワーカーパターンのワークフロー定義、知識。
 
 ---
 
 ## なぜ並列実装が必要か
 
-標準的な IDD（`iddue:start`）は Issue 1件を1プロセスで直列に実装する。
+標準的な IDDUE（`iddue:start`）は Issue 1件を1プロセスで直列に実装する。
 しかし親 Issue が複数の独立したサブ Issue に分割できる場合、並列実装によって：
 
 - 実装時間の短縮（依存のないサブ Issue を同時進行）

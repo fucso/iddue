@@ -1,7 +1,7 @@
 ---
 name: iddue:fetch-issue
 description: |
-  IDD ワークフローで必要な Issue コンテキストを収集し、
+  IDDUE ワークフローで必要な Issue コンテキストを収集し、
   .iddue/issue/{number}.yaml に書き出してその YAML 内容を返す。
 argument-hint: "{Issue 番号} [force:true|false]"
 ---

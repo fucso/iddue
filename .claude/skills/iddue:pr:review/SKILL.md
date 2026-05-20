@@ -1,12 +1,12 @@
 ---
 name: iddue:pr:review
 description: |
-  IDD issue に紐づいた PR のレビューを行うスキル
+  IDDUE issue に紐づいた PR のレビューを行うスキル
   issue 内容、PR 差分、ブランチの最新コードを複数観点でレビューし、指摘があれば PR レビューとしてコメントする
 argument-hint: "{Issue 番号}"
 ---
 
-# `/iddue:pr:review` — IDD PR AI レビュー
+# `/iddue:pr:review` — IDDUE PR AI レビュー
 
 ## 使い方
 

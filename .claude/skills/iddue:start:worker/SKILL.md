@@ -53,7 +53,7 @@ env -u CLAUDECODE claude -p "/iddue:start:worker {sub} {setupBranch}"
 
 **既存ブランチの削除:**
 
-IDD ワーカーは常に最初から実装するため、`iddue/{sub}` ブランチが既存の場合は事前に削除する。
+IDDUE ワーカーは常に最初から実装するため、`iddue/{sub}` ブランチが既存の場合は事前に削除する。
 
 ```bash
 git branch -D "iddue/{sub}" 2>/dev/null || true

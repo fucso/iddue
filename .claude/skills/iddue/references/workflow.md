@@ -1,4 +1,4 @@
-# IDD ワークフロー（Issue 中心の開発フロー）
+# IDDUE ワークフロー（Issue 中心の開発フロー）
 
 GitHub Issues を起点とした開発ワークフローの全体像。
 

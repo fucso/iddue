@@ -1,7 +1,7 @@
 ---
 name: iddue:orchestration-development:resolve-conflict
 description: |
-  IDD オーケストレーション中に発生したコンフリクトを worktree 上で解消し、
+  IDDUE オーケストレーション中に発生したコンフリクトを worktree 上で解消し、
   品質チェックをパスさせてローカルブランチを更新するスキル。
   complete-task.sh からフォアグラウンドで起動される。
 argument-hint: "{サブ Issue 番号} {親 Issue 番号}"

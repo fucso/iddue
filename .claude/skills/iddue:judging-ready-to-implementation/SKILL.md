@@ -1,7 +1,7 @@
 ---
 name: iddue:judging-ready-to-implementation
 description: |
-  IDD Issue がエージェントによる実装に十分な具体性を持つかを判定する。
+  IDDUE Issue がエージェントによる実装に十分な具体性を持つかを判定する。
   実装可否と理由を返す。
 argument-hint: "{Issue 番号} [refresh:true]"
 ---

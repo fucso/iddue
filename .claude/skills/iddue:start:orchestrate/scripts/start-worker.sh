@@ -1,5 +1,5 @@
 #!/bin/bash
-# start-worker.sh - IDD ワーカープロセスを起動する
+# start-worker.sh - IDDUE ワーカープロセスを起動する
 #
 # Usage: bash start-worker.sh <sub-issue-number> <setup-branch>
 #

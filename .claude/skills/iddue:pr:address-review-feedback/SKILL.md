@@ -37,7 +37,7 @@ Phase 4: 完了報告 + cleanup
 
 ## Phase 1: コンテキスト収集
 
-### 1.1 IDD Issue コンテキストの取得
+### 1.1 IDDUE Issue コンテキストの取得
 
 ```
 /iddue:fetch-issue {parent} force:true
