@@ -1,0 +1,16 @@
+parent_issue: 14
+main_issue_branch: "iddue/14"
+created_at: "2026-05-21T15:35:00+09:00"
+
+tasks:
+  - issue: 15
+    title: "[Sub A] iddue:judging-ready-to-implementation に Issue コメント投稿ステップを追加する"
+    dependencies: []
+  - issue: 16
+    title: "[Sub B] GitHub Actions 判定・実装ワークフローを追加する（iddue-judge.yml + iddue-implement.yml）"
+    dependencies:
+      - 15
+  - issue: 17
+    title: "[Sub C] GitHub Actions レビュー・対応ワークフローを追加する（iddue-review.yml + iddue-address.yml）"
+    dependencies:
+      - 15
