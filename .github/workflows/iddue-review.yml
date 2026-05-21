@@ -1,0 +1,51 @@
+name: iddue - Review
+on:
+  push:
+    branches: ['iddue/**']
+  # CI がある場合はいずれかをコメント解除してください。
+  # 外部 CI（CircleCI / Travis CI 等）の場合:
+  # check_suite:
+  #   types: [completed]
+  # GitHub Actions CI の場合:
+  # workflow_run:
+  #   workflows: ["CI"]
+  #   types: [completed]
+  #   branches: ['iddue/**']
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: iddue-review-${{ github.ref_name }}
+      cancel-in-progress: true
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check review ok label
+        id: check-label
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_NUM=$(gh pr list --head "${{ github.ref_name }}" --json number -q '.[0].number')
+          if [ -z "$PR_NUM" ]; then
+            echo "skip=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          HAS_LABEL=$(gh pr view "$PR_NUM" --json labels -q '.labels[].name' | grep -c "iddue: review ok" || true)
+          echo "skip=$([ "$HAS_LABEL" -gt 0 ] && echo true || echo false)" >> $GITHUB_OUTPUT
+      - name: Wait for CI
+        if: steps.check-label.outputs.skip == 'false'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_NUM=$(gh pr list --head "${{ github.ref_name }}" --json number -q '.[0].number')
+          sleep 30
+          CI_COUNT=$(gh pr checks "$PR_NUM" --json name 2>/dev/null | jq 'length' || echo 0)
+          if [ "${CI_COUNT:-0}" -gt 0 ]; then
+            gh pr checks "$PR_NUM" --watch
+          fi
+      - name: Run review
+        if: steps.check-label.outputs.skip == 'false'
+        uses: anthropics/claude-code-action@v1
+        with:
+          prompt: "/iddue:pr:review ${{ github.ref_name }}"
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
