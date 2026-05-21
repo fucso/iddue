@@ -20,7 +20,7 @@ OWNER=$(echo "$REPO_FULL" | cut -d'/' -f1)
 REPO=$(echo "$REPO_FULL" | cut -d'/' -f2)
 
 has_label=$(gh api "repos/${OWNER}/${REPO}/issues/${ISSUE_NUMBER}" \
-  --jq --arg label "$LABEL" '[.labels[].name] | contains([$label])')
+  --jq "[.labels[].name] | contains([\"${LABEL}\"])")
 
 if [ "$has_label" = "true" ]; then
   exit 0
