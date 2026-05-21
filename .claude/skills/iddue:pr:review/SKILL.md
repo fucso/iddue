@@ -53,6 +53,9 @@ Phase 1: フィードバック解決確認（iddue:pr:check-feedback-resolution 
          ↓ OK（または前回コメントなし）
 Phase 2: コンテキスト収集 + worktree 作成（自動）
          ↓
+Phase 2.3: コンフリクトチェック
+    → CONFLICTING? → analyze-conflicts.sh で分析・結果を記録（フローは継続）
+         ↓
 （オーケストレーション PR のみ）
 観点①完了状況 → CRITICAL? → PR にコメント投稿して終了（cleanup）
          ↓ OK
@@ -111,9 +114,30 @@ PR が紐づいていない場合（`linked_pr` が null）はエラーを表示
 bash .claude/skills/github-pr/scripts/get-pr-info.sh {pr_number}
 ```
 
-結果を `pr_info` として保持（`pr_info.number`, `pr_info.headRefOid`, `pr_info.url`, `pr_info.checks`）。
+結果を `pr_info` として保持（`pr_info.number`, `pr_info.headRefOid`, `pr_info.headRefName`, `pr_info.baseRefName`, `pr_info.url`, `pr_info.mergeable`, `pr_info.mergeStateStatus`, `pr_info.checks`）。
 
-### 2.3 PR 差分の取得
+### 2.3 コンフリクトチェック
+
+`pr_info.mergeable` を確認する。
+
+- `MERGEABLE` または `UNKNOWN` → スキップして 2.4 へ
+- `CONFLICTING` → 以下の手順を実行する
+
+**コンフリクトが検出された場合の処理:**
+
+**1. コンフリクト内容の分析**
+
+スクリプトを実行してコンフリクト候補ファイル（ベースブランチと PR ブランチの両方で変更されているファイル）と、各ファイルの両側の差分を取得する：
+
+```bash
+bash .claude/skills/github-pr/scripts/analyze-conflicts.sh \
+  {pr_info.baseRefName} {pr_info.headRefName}
+```
+
+出力 JSON 配列の各要素は `{file, base_diff, head_diff}` を持つ。結果を `conflict_analysis` として保持し、フローを継続する。
+コンフリクト情報は Phase 4 のレビューコメントで他の観点指摘と合わせて提示する。
+
+### 2.4 PR 差分の取得
 
 ```bash
 bash .claude/skills/github-pr/scripts/get-diff.sh {pr_info.number}
@@ -121,17 +145,17 @@ bash .claude/skills/github-pr/scripts/get-diff.sh {pr_info.number}
 
 変更前後の比較・コメントの行番号特定に使用する。
 
-### 2.4 変更ファイル一覧の取得
+### 2.5 変更ファイル一覧の取得
 
 ```bash
 bash .claude/skills/github-pr/scripts/get-diff.sh {pr_info.number} --name-only
 ```
 
-### 2.5 CI ステータスの取得
+### 2.6 CI ステータスの取得
 
 Phase 2.2 の `pr_info.checks` を参照する（`get-pr-info.sh` の出力に含まれる）。
 
-### 2.6 worktree の作成
+### 2.7 worktree の作成
 
 `.claude/skills/worktree-development/SKILL.md` の機能を使って worktree を作成する。
 
@@ -148,7 +172,7 @@ bash .claude/skills/worktree-development/scripts/setup.sh "iddue-review/{parent}
 
 以降、**PR ブランチのコード全体**は `.worktree/iddue-review/{parent}/` 配下のファイルを `Read` ツールで参照する。
 
-### 2.7 worktree からのファイル取得と前提条件チェック
+### 2.8 worktree からのファイル取得と前提条件チェック
 
 worktree 作成後、Phase 2.1 の `sub_issues` の有無で PR 種別を確認する。
 
@@ -229,6 +253,8 @@ status.yaml を読み取り、全サブ Issue のステータスを確認する�
 問題箇所を diff の行に紐づけられる場合は inline コメントとして投稿する。
 インラインコメントの `body` にも `<!-- iddue:pr:review -->` を付与すること。
 
+`conflict_analysis` に結果がある場合は、コメント本文の冒頭に「コンフリクト検出」セクションを追加する（後述フォーマット参照）。
+
 ```bash
 # インラインコメントを JSON ファイルに書き出す
 cat > /tmp/review-comments.json << 'EOF'
@@ -254,6 +280,8 @@ echo "<!-- iddue:pr:review -->
 
 PR の Approve は行わない。`COMMENT` イベントでレビュー結果を残す。
 
+`conflict_analysis` に結果がある場合は、コメント本文の冒頭に「コンフリクト検出」セクションを追加する（後述フォーマット参照）。
+
 ```bash
 echo "<!-- iddue:pr:review -->
 {aspects/05-code-quality.md のレビュー OK フォーマットに従った本文}" | \
@@ -276,7 +304,29 @@ echo "<!-- iddue:pr:review -->
   {pr_info.number} {pr_info.headRefOid} COMMENT
 ```
 
-### 4.4 worktree のクリーンアップ
+### 4.4 コンフリクト検出セクションのフォーマット
+
+`conflict_analysis` に結果がある場合（4.1 / 4.2 共通）、コメント本文の冒頭に以下を付加する：
+
+```markdown
+## ⚠️ コンフリクト検出
+
+PR にマージコンフリクトが発生しています。
+
+### {ファイルパス}
+
+**ベースブランチ（{baseRefName}）側の変更:**
+{base_diff の概要}
+
+**PR ブランチ（{headRefName}）側の変更:**
+{head_diff の概要}
+
+{ファイルが複数ある場合は上記を繰り返す}
+
+---
+```
+
+### 4.5 worktree のクリーンアップ
 
 コメント投稿後（または投稿失敗時も）、必ず実行する：
 
@@ -284,7 +334,7 @@ echo "<!-- iddue:pr:review -->
 bash .claude/skills/worktree-development/scripts/cleanup.sh "iddue-review/{parent}"
 ```
 
-### 4.5 ユーザーへの完了報告
+### 4.6 ユーザーへの完了報告
 
 ```
 ✅ AI レビュー完了
@@ -295,6 +345,7 @@ PR: {pr_info.url}
 {レビュー OK の場合}
 すべての観点で CRITICAL なし。PR にレビュー結果コメントを投稿しました。
 {WARNING/INFO があれば件数を記載}
+{コンフリクトがあれば: コンフリクト検出 {N} ファイル（コメント参照）}
 
 {要修正の場合}
 観点{①~⑤}: CRITICAL {N} 件

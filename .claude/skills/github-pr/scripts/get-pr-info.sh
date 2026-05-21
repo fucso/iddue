@@ -2,7 +2,7 @@
 # PR の情報と CI ステータスを取得する
 #
 # Usage: ./get-pr-info.sh <pr_number>
-# Output: {"number": N, "headRefOid": "...", "url": "...", "checks": [...]}
+# Output: {"number": N, "headRefOid": "...", "headRefName": "...", "baseRefName": "...", "url": "...", "mergeable": "...", "mergeStateStatus": "...", "checks": [...]}
 
 set -e
 
@@ -13,7 +13,7 @@ REPO=$(bash "${SCRIPT_DIR}/get-repo.sh")
 
 PR=$(gh pr view "${PR_NUMBER}" \
   --repo "$REPO" \
-  --json number,headRefOid,url)
+  --json number,headRefOid,headRefName,baseRefName,url,mergeable,mergeStateStatus)
 
 if [ -z "${PR}" ] || [ "${PR}" = "null" ]; then
   echo "Error: PR #${PR_NUMBER} not found" >&2
