@@ -43,9 +43,12 @@ jobs:
           if [ "${CI_COUNT:-0}" -gt 0 ]; then
             gh pr checks "$PR_NUM" --watch
           fi
+      - name: Extract issue number
+        id: issue
+        run: echo "number=$(echo '${{ github.ref_name }}' | sed 's|iddue/||')" >> $GITHUB_OUTPUT
       - name: Run review
         if: steps.check-label.outputs.skip == 'false'
         uses: anthropics/claude-code-action@v1
         with:
-          prompt: "/iddue:pr:review ${{ github.ref_name }}"
+          prompt: "/iddue:pr:review ${{ steps.issue.outputs.number }}"
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
