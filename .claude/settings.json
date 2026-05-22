@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(*)",
+      "Write(*)",
+      "Update(*)",
+      "Glob(*)",
+      "Grep(*)",
+      "Bash(bash *)",
+      "Bash(cat *)",
+      "Bash(mkdir *)",
+      "Bash(chmod *)",
+      "Bash(node *)",
+      "Bash(git *)",
+      "Bash(gh *)",
+      "Bash(ls *)",
+      "Bash(find *)",
+      "Bash(tee *)",
+      "Bash(mktemp *)",
+      "Bash(rm *)",
+      "Bash(echo *)",
+      "Bash(cd *)",
+      "Agent(*)",
+      "Skill(*)"
+    ]
+  }
+}
