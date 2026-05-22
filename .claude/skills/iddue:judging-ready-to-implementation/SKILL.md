@@ -107,12 +107,6 @@ bash .claude/skills/iddue:judging-ready-to-implementation/scripts/add-label.sh {
 実装を開始します。
 ```
 
-判定結果を Issue にコメントとして投稿する：
-
-```bash
-bash .claude/skills/iddue:judging-ready-to-implementation/scripts/post-comment.sh {Issue 番号} "{上記の出力内容}"
-```
-
 #### 実装不可の場合
 
 ```

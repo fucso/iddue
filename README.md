@@ -20,9 +20,9 @@ GitHub Issues を起点とした開発ワークフローを Claude Code 上で�
 | Secret 名 | 内容 |
 |-----------|------|
 | `ANTHROPIC_API_KEY` | Anthropic API キー |
-| `IDDUE_TOKEN` | GitHub PAT（`repo` / `issues` / `pull_requests` スコープ付き）|
+| `GITHUB_PAT` | GitHub PAT（`repo` / `issues` / `pull_requests` スコープ付き）|
 
-`IDDUE_TOKEN` に通常の `GITHUB_TOKEN` ではなく PAT を使う理由は、判定ワークフローが付与したラベルで実装ワークフローを連鎖トリガーするためです（`GITHUB_TOKEN` によるイベントは別ワークフローをトリガーしません）。
+`GITHUB_PAT` に通常の `GITHUB_TOKEN` ではなく PAT を使う理由は、判定ワークフローが付与したラベルで実装ワークフローを連鎖トリガーするためです（`GITHUB_TOKEN` によるイベントは別ワークフローをトリガーしません）。
 
 ### 自動化フロー
 
@@ -34,14 +34,6 @@ Issue に iddue ラベル付与
         → PR レビュー（iddue-review.yml / push ごとに自動実行）
           → フィードバック対応（iddue-address.yml / レビュー投稿を検知）
 ```
-
-### ラベルの作成
-
-GitHub リポジトリに以下のラベルを作成してください。
-
-- `iddue` — 自動化の起点となるラベル
-- `ready to implementation` — 実装ワークフローのトリガー
-- `iddue: review ok` — このラベルが付いた PR はレビュー・対応ワークフローをスキップ
 
 ## スキル
 

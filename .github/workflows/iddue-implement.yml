@@ -17,21 +17,25 @@ jobs:
       pull-requests: write
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.IDDUE_TOKEN }}
-
-      - name: Configure git
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-      - name: Install Claude Code
-        run: npm install -g @anthropic-ai/claude-code
-
-      - name: Run implementation
+      - name: Check for sub-issues
+        id: sub-issues
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          GH_TOKEN: ${{ secrets.IDDUE_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          claude -p "/iddue:start ${{ github.event.issue.number }}"
+          COUNT=$(gh api graphql -f query='
+            query($owner:String!,$repo:String!,$number:Int!){
+              repository(owner:$owner,name:$repo){
+                issue(number:$number){ subIssues{ totalCount } }
+              }
+            }' \
+            -F owner="${{ github.repository_owner }}" \
+            -F repo="${{ github.event.repository.name }}" \
+            -F number="${{ github.event.issue.number }}" \
+            --jq '.data.repository.issue.subIssues.totalCount')
+          echo "exists=$([ "${COUNT:-0}" -gt 0 ] && echo true || echo false)" >> $GITHUB_OUTPUT
+      - uses: anthropics/claude-code-action@v1
+        if: steps.sub-issues.outputs.exists == 'false'
+        with:
+          prompt: "/iddue:start ${{ github.event.issue.number }}"
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ secrets.GITHUB_PAT }}
