@@ -14,7 +14,10 @@ jobs:
       cancel-in-progress: false
     steps:
       - uses: actions/checkout@v4
+      - name: Extract issue number
+        id: issue
+        run: echo "number=$(echo '${{ github.event.pull_request.head.ref }}' | sed 's|iddue/||')" >> $GITHUB_OUTPUT
       - uses: anthropics/claude-code-action@v1
         with:
-          prompt: "/iddue:pr:address-review-feedback ${{ github.event.pull_request.head.ref }}"
+          prompt: "/iddue:pr:address-review-feedback ${{ steps.issue.outputs.number }}"
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
