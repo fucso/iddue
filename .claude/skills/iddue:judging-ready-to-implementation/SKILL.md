@@ -24,6 +24,7 @@ argument-hint: "{Issue 番号} [refresh:true]"
 
 - [`scripts/check-label.sh`](scripts/check-label.sh) — `ready to implementation` ラベルの有無を確認（exit 0: あり / exit 1: なし）
 - [`scripts/add-label.sh`](scripts/add-label.sh) — `ready to implementation` ラベルを付与（存在しない場合は自動作成）
+- [`scripts/post-comment.sh`](scripts/post-comment.sh) — 判定結果を Issue コメントとして投稿
 
 ## 利用方法
 
@@ -106,6 +107,12 @@ bash .claude/skills/iddue:judging-ready-to-implementation/scripts/add-label.sh {
 実装を開始します。
 ```
 
+判定結果を Issue にコメントとして投稿する：
+
+```bash
+bash .claude/skills/iddue:judging-ready-to-implementation/scripts/post-comment.sh {Issue 番号} "{上記の出力内容}"
+```
+
 #### 実装不可の場合
 
 ```
@@ -127,4 +134,10 @@ bash .claude/skills/iddue:judging-ready-to-implementation/scripts/add-label.sh {
 ## 推奨アクション
 
 {不足を解消するために何をすべきか具体的に提案}
+```
+
+判定結果を Issue にコメントとして投稿する：
+
+```bash
+bash .claude/skills/iddue:judging-ready-to-implementation/scripts/post-comment.sh {Issue 番号} "{上記の出力内容}"
 ```
