@@ -22,12 +22,13 @@ argument-hint: "{Issue 番号}"
 
 ## チェックの考え方
 
-未解決スレッドには2種類がある。どちらも同じ「未解決」として取得されるが、処理方法が異なる。
+未解決スレッドには3種類がある。どれも「未解決」だが取得方法と処理が異なる。
 
-| 種別 | 判定方法 | 処理 |
+| 種別 | 取得方法 | 処理 |
 |------|---------|------|
-| **異議スレッド** | `<!-- iddue:pr:review -->` 付きコメントへのユーザー返信 | Phase 2: ユーザーと議論して解消 |
-| **コード修正待ちスレッド** | 上記以外の未解決スレッド | Phase 3: コード変更で解消されているか確認 |
+| **異議スレッド** | 通常取得（`isOutdated: false`）のうち `<!-- iddue:pr:review -->` 付きコメントへのユーザー返信 | Phase 2: ユーザーと議論して解消 |
+| **コード修正待ちスレッド** | 通常取得（`isOutdated: false`）のうち上記以外 | Phase 3: コード変更で解消されているか確認 |
+| **outdated スレッド** | `--outdated true` で取得（`isOutdated: true`）。コメント後にそのコード位置が変更されたスレッド | Phase 3: 同様にコード変更で解消されているか確認 |
 
 | チェック対象 | 参照元 |
 |-------------|--------|
@@ -41,7 +42,7 @@ argument-hint: "{Issue 番号}"
 
 ```
 Phase 1: コンテキスト収集 + worktree 作成
-    → 未解決スレッドなし → 即通過（worktree 不要のためクリーンアップ不要）
+    → 未解決スレッドなし（通常・outdated 両方） → 即通過（worktree 不要のためクリーンアップ不要）
          ↓ 未解決スレッドあり
 Phase 2: 異議コメント検出・解消
     → 異議スレッドあり? → ユーザーへ提示・議論・スレッドへ返信・必要なら resolve
@@ -89,12 +90,18 @@ bash .claude/skills/github-pr/scripts/get-pr-info.sh {pr_number}
 
 ### 1.3 未解決レビューの取得
 
+通常スレッドと outdated スレッドを別々に取得し、結合して `unresolved_threads` として保持する。
+
 ```bash
+# 通常の未解決スレッド（isOutdated: false）
 bash .claude/skills/github-pr/scripts/get-review-feedback.sh {pr_number}
+
+# outdated な未解決スレッド（isOutdated: true）
+bash .claude/skills/github-pr/scripts/get-review-feedback.sh {pr_number} --outdated true
 ```
 
-結果を `unresolved_threads` として保持する。
-**空配列であれば対応不要として即通過**（worktree を作成していないためクリーンアップ不要）。
+2 つの結果を結合したものを `unresolved_threads` とする。
+**両方が空配列であれば対応不要として即通過**（worktree を作成していないためクリーンアップ不要）。
 
 ### 1.4 前回の結果コメントをクローズ
 
@@ -201,6 +208,8 @@ bash .claude/skills/github-pr/scripts/get-diff.sh {pr_info.number} {original_com
 ```
 
 `path` がないコメント（PR 全体へのコメント）は `path` 引数を省略する。
+
+**outdated スレッド（`isOutdated: true`）の場合:** 元のコード位置がすでに変更されているため、差分に指摘箇所が直接現れないことがある。`path` を指定してファイル単位の差分を取得し、3.2 の最新コード全体の参照を重点的に行って解消状況を判定する。
 
 ### 3.2 最新コードを読む
 

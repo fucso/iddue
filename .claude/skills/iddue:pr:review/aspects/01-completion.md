@@ -19,7 +19,7 @@
 
 ## 判定基準
 
-### CRITICAL（フロー停止・REQUEST_CHANGES）
+### CRITICAL（フロー停止・COMMENT）
 
 以下のいずれかに該当するサブ Issue が 1 件でもある場合：
 
@@ -58,7 +58,7 @@
 
 ### 問題あり（CRITICAL）
 
-`SKILL.md Phase 4.1` の REQUEST_CHANGES で投稿。`comments` は空配列（inline 紐づけ不要）。
+`SKILL.md Phase 4.1` の COMMENT で投稿。`comments` は空配列（inline 紐づけ不要）。
 
 ```markdown
 ## AI Review — 観点①サブ Issue 完了状況

@@ -45,7 +45,7 @@ Issue に定義された設計（スコープ・対象ファイル・インタ�
 
 以下はオーケストレーション・単独 Issue 共通の基準。設計ドキュメントの参照先がモードによって異なる。
 
-### CRITICAL（フロー停止・REQUEST_CHANGES）
+### CRITICAL（フロー停止・COMMENT）
 
 設計（config.yaml または Issue 本文）から以下のような **記載なしの逸脱** がある場合：
 
@@ -113,7 +113,7 @@ Issue に定義された設計（スコープ・対象ファイル・インタ�
 
 ### 問題あり（CRITICAL）
 
-`SKILL.md Phase 4.1` の REQUEST_CHANGES で投稿。
+`SKILL.md Phase 4.1` の COMMENT で投稿。
 逸脱箇所が diff の特定の行に紐づけられる場合はインラインコメントも付ける。
 
 #### オーケストレーションモード
