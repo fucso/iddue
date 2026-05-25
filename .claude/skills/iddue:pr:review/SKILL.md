@@ -17,7 +17,7 @@ argument-hint: "{Issue 番号}"
 
 **前提条件:**
 - `iddue/{parent}` ブランチの PR が存在すること
-- **オーケストレーション PR の場合**: `.iddue/orchestration/status.yaml` で全サブ Issue が `complete` であること
+- **オーケストレーション PR の場合**: `.orchestrate/status.yaml` で全サブ Issue が `complete` であること
 - **単独 Issue PR の場合**: 前提条件なし（PR が存在すること）
 
 **単独 Issue PR とオーケストレーション PR の違い:**
@@ -40,7 +40,7 @@ argument-hint: "{Issue 番号}"
 |-----------|--------|------|
 | **変更内容・差分** | `gh pr diff`（PR diff） | 何が追加・削除されたかの確認 |
 | **実装後のコード全体** | worktree（`.worktree/iddue-review/{parent}/`） | コードの完全なコンテキスト・品質確認 |
-| **オーケストレーション成果物** | worktree 内の `.iddue/orchestration/` | status.yaml・implement.md（オーケストレーション PR のみ） |
+| **オーケストレーション成果物** | worktree 内の `.orchestrate/` | status.yaml・implement.md（オーケストレーション PR のみ） |
 
 ---
 
@@ -180,8 +180,8 @@ worktree 作成後、Phase 2.1 の `sub_issues` の有無で PR 種別を確認�
 
 | ファイル | パス |
 |---------|------|
-| **status.yaml** | `.worktree/iddue-review/{parent}/.iddue/orchestration/status.yaml` |
-| 各サブ implement.md | `.worktree/iddue-review/{parent}/.iddue/orchestration/reports/{sub}/implement.md` |
+| **status.yaml** | `.worktree/iddue-review/{parent}/.orchestrate/status.yaml` |
+| 各サブ implement.md | `.worktree/iddue-review/{parent}/.orchestrate/reports/{sub}/implement.md` |
 | 親 Issue YAML（任意） | `.worktree/iddue-review/{parent}/.iddue/issue/{parent}.yaml` |
 
 **status.yaml の前提条件チェック（オーケストレーション PR のみ）:**

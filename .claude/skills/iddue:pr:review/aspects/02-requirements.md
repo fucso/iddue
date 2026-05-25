@@ -23,7 +23,7 @@
 | データ | 参照元 |
 |--------|--------|
 | 各サブ Issue 本文 | Phase 2 で取得済み |
-| 各サブ `implement.md` | worktree: `.worktree/iddue-review/{parent}/.iddue/orchestration/reports/{sub}/implement.md` |
+| 各サブ `implement.md` | worktree: `.worktree/iddue-review/{parent}/.orchestrate/reports/{sub}/implement.md` |
 
 ---
 

@@ -126,7 +126,7 @@
 ### `iddue:setup-orchestration`
 
 - **種別:** ワークフローコマンド（ユーザーが明示的に呼び出す / `iddue:open:concrete` から委譲される）
-- **担当領域:** 親 Issue と Sub Issue が起票済みの状態から並列実装に必要な情報を付与する。メイン Issue ブランチ（`iddue/{parent}`）の作成・push、`.iddue/orchestration/config.yaml` の生成・コミット、メイン Issue PR の作成（ドラフト）、各サブ Issue YAML への `parent.linked_pr.branch` 設定、readiness チェックまで一貫して処理する。Sub Issue が存在しない場合はエラーで終了する。完了後は `/iddue:start {parent}` でオーケストレーター実装を開始できる状態になる。
+- **担当領域:** 親 Issue と Sub Issue が起票済みの状態から並列実装に必要な情報を付与する。メイン Issue ブランチ（`iddue/{parent}`）の作成・push、`.orchestrate/config.yaml` の生成・コミット、メイン Issue PR の作成（ドラフト）、各サブ Issue YAML への `parent.linked_pr.branch` 設定、readiness チェックまで一貫して処理する。Sub Issue が存在しない場合はエラーで終了する。完了後は `/iddue:start {parent}` でオーケストレーター実装を開始できる状態になる。
 
 ---
 

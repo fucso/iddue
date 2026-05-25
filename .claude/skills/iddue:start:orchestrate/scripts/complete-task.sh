@@ -71,7 +71,7 @@ fi
 # Step 4: tasks.js で状態を complete に更新
 node "${SCRIPTS_DIR}/tasks.js" complete "${SUB}"
 
-# Step 5: status.yaml をコミット（conflict.md があれば git add 済み）
+# Step 5: status.yaml をコミット
 git add "${STATUS_FILE}"
 git commit -m "orchestration: complete sub-issue #${SUB}"
 
