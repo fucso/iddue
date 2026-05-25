@@ -24,6 +24,7 @@ argument-hint: "{Issue 番号}"
 
 ```
 Phase 1: コンテキスト収集 + worktree 作成
+    → CONFLICTING → コンフリクト解消 → コミット（以降は通常フローへ）
     → 未解決スレッドなし → 対応不要としてユーザーに報告して終了（cleanup）
          ↓ 未解決スレッドあり
 Phase 2: 修正タスクの整理
@@ -59,7 +60,7 @@ Phase 4: 完了報告 + cleanup
 bash .claude/skills/github-pr/scripts/get-pr-info.sh {pr_number}
 ```
 
-結果を `pr_info` として保持（`headRefOid`, `url`）。
+結果を `pr_info` として保持（`headRefOid`, `headRefName`, `baseRefName`, `url`, `mergeable`, `mergeStateStatus`）。
 
 ### 1.3 未解決レビュースレッドの取得
 
@@ -86,6 +87,49 @@ bash .claude/skills/worktree-development/scripts/setup.sh "iddue-review/{parent}
 **オーケストレーション PR の場合**（`sub_issues` が空でない）、`Read` ツールで以下を読み取る：
 - `.worktree/iddue-review/{parent}/.iddue/orchestration/reports/{sub}/implement.md`
 - `.worktree/iddue-review/{parent}/.iddue/issue/{parent}.yaml`（存在する場合）
+
+### 1.6 コンフリクトチェックと解消
+
+`pr_info.mergeable` を確認する。
+
+- `MERGEABLE` または `UNKNOWN` → スキップして Phase 2 へ
+- `CONFLICTING` → 以下の手順でコンフリクトを解消する
+
+**コンフリクト解消手順:**
+
+**1. ベースブランチをマージ（--no-commit でコンフリクト状態を確認）**
+
+```bash
+git -C .worktree/iddue-review/{parent} merge origin/{pr_info.baseRefName} --no-commit --no-ff
+```
+
+**2. コンフリクトファイルの特定**
+
+```bash
+git -C .worktree/iddue-review/{parent} diff --name-only --diff-filter=U
+```
+
+**3. 各コンフリクトファイルの解消**
+
+`github-pr` の analyze-conflicts.sh を使って両側の差分を取得し、PR の Issue コンテキストと照合して解消方針を判断する：
+
+```bash
+bash .claude/skills/github-pr/scripts/analyze-conflicts.sh \
+  {pr_info.baseRefName} {pr_info.headRefName}
+```
+
+`Read` ツールでコンフリクトマーカーを含むファイルを読み取り、`Edit` ツールで解消する。
+解消後、`git -C .worktree/iddue-review/{parent} add {file}` でステージングする。
+
+**4. マージコミット**
+
+```bash
+bash .claude/skills/worktree-development/scripts/commit.sh \
+  "iddue-review/{parent}" \
+  "fix: {pr_info.baseRefName} をマージしてコンフリクトを解消する"
+```
+
+コンフリクト解消後、Phase 2 へ進む（他に未解決スレッドがなければそのまま Phase 3.4 のプッシュへ）。
 
 ---
 
