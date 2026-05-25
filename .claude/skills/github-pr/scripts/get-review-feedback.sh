@@ -2,7 +2,7 @@
 # PR のレビュースレッドとレビュー本体を取得する
 #
 # Usage: ./get-review-feedback.sh <pr_number> [--resolved <true|false>] [--outdated <true|false>]
-# Defaults: --resolved false --outdated false
+# Defaults: フラグ未指定時はフィルターなし（両方取得）
 #
 # 返却オブジェクトの type フィールド:
 #   "thread" - コード行に紐づくインラインスレッド (PullRequest.reviewThreads)
@@ -16,8 +16,8 @@ set -e
 PR_NUMBER="${1:?Usage: $0 <pr_number> [--resolved <true|false>] [--outdated <true|false>]}"
 shift
 
-RESOLVED="false"
-OUTDATED="false"
+RESOLVED=""
+OUTDATED=""
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -75,11 +75,14 @@ gh api graphql \
   -f repo="$REPO" \
   -F number="${PR_NUMBER}" \
   --jq '{threads: .data.repository.pullRequest.reviewThreads.nodes, reviews: .data.repository.pullRequest.reviews.nodes}' \
-| jq --argjson resolved "${RESOLVED}" --argjson outdated "${OUTDATED}" \
+| jq --arg resolved "${RESOLVED}" --arg outdated "${OUTDATED}" \
   '
     (
       .threads
-      | map(select(.isResolved == $resolved and .isOutdated == $outdated))
+      | map(select(
+          ($resolved == "" or .isResolved == ($resolved == "true"))
+          and ($outdated == "" or .isOutdated == ($outdated == "true"))
+        ))
       | map(. + {type: "thread"})
     )
     +
