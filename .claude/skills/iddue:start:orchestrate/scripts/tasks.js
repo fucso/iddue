@@ -2,8 +2,8 @@
 // tasks.js - IDD オーケストレーション状態管理
 //
 // データソース:
-//   .iddue/orchestration/config.yaml  (依存グラフ、read-only)
-//   .iddue/orchestration/status.yaml  (実行状態、read-write)
+//   .orchestrate/config.yaml  (依存グラフ、read-only)
+//   .orchestrate/status.yaml  (実行状態、read-write)
 //
 // サブコマンド:
 //   unblocked              pending かつブロックなしの issue 番号を改行区切りで出力
@@ -190,8 +190,8 @@ function main() {
   const arg2    = process.argv[4];
 
   const repoRoot   = getRepoRoot();
-  const configFile = path.join(repoRoot, '.iddue', 'orchestration', 'config.yaml');
-  const statusFile = path.join(repoRoot, '.iddue', 'orchestration', 'status.yaml');
+  const configFile = path.join(repoRoot, '.orchestrate', 'config.yaml');
+  const statusFile = path.join(repoRoot, '.orchestrate', 'status.yaml');
 
   // init コマンドのみ config.yaml と status.yaml を生成
   if (command === 'init') {

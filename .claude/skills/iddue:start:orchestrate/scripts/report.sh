@@ -12,8 +12,8 @@ REPO_ROOT=$(git -C "$SCRIPTS" rev-parse --show-toplevel)
 cd "$REPO_ROOT"
 
 ISSUE_YAML=".iddue/issue/${PARENT}.yaml"
-CONFIG_YAML=".iddue/orchestration/config.yaml"
-STATUS_YAML=".iddue/orchestration/status.yaml"
+CONFIG_YAML=".orchestrate/config.yaml"
+STATUS_YAML=".orchestrate/status.yaml"
 
 # config.yaml からタイトルを取得
 task_title() {
@@ -81,7 +81,7 @@ JUDGING_NG_FOUND=false
 if [ -n "$PENDING" ]; then
   while IFS= read -r sub; do
     [ -z "$sub" ] && continue
-    JUDGING_LOG=".iddue/orchestration/tasks/${sub}/judging.log"
+    JUDGING_LOG=".orchestrate/tasks/${sub}/judging.log"
     if [ -f "$JUDGING_LOG" ]; then
       $JUDGING_NG_FOUND || { echo ""; echo "⚠️  judging NG のサブ Issue（対応が必要）:"; }
       JUDGING_NG_FOUND=true

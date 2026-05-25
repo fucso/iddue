@@ -3,7 +3,7 @@
 #
 # PostToolUse フックから呼び出される。
 # 環境変数 IDD_WORKER_SUB（start-worker.sh が設定）でタスク番号を受け取り、
-# .iddue/orchestration/tasks/{sub}/actions.log に1行追記する。
+# .orchestrate/tasks/{sub}/actions.log に1行追記する。
 #
 # stdin: Claude Code が渡す PostToolUse の JSON
 # 出力例: [12:01:05] Edit: app/models/user.rb
@@ -11,7 +11,7 @@
 set -euo pipefail
 
 SUB="${IDD_WORKER_SUB:-unknown}"
-LOG_DIR="${CLAUDE_PROJECT_DIR}/.iddue/orchestration/tasks/${SUB}"
+LOG_DIR="${CLAUDE_PROJECT_DIR}/.orchestrate/tasks/${SUB}"
 ACTIONS_LOG="${LOG_DIR}/actions.log"
 
 [ -d "$LOG_DIR" ] || exit 0

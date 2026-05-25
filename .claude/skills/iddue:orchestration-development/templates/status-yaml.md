@@ -5,7 +5,7 @@
 ## ファイルパス
 
 ```
-.iddue/orchestration/status.yaml
+.orchestrate/status.yaml
 ```
 
 ## スキーマ

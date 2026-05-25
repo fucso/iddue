@@ -5,19 +5,54 @@
 ## ファイル構造
 
 ```
-.iddue/
-└── orchestration/                  git commit して main issue PR に含まれる
-    ├── config.yaml                 iddue:setup-orchestration が生成（read-only）
-    ├── status.yaml                 iddue:start:orchestrate が生成・更新（read-write）
-    ├── reports/
-    │   └── {sub-issue-number}/
-    │       ├── implement.md        iddue:start:worker が生成（完了シグナル + 実装サマリー）
-    │       └── conflict.md         complete-task.sh が生成（コンフリクト解消時のみ）
-    └── tasks/
-        └── {sub-issue-number}/
-            ├── judging.log         dispatch-unblocked.sh が出力（readiness 判定）
-            └── worker.log          start-worker.sh が出力（デバッグ用）
+.orchestrate/
+├── config.yaml                 iddue:setup-orchestration が生成（read-only）       ✅ git 追跡
+├── status.yaml                 オーケストレーターが管理・更新（read-write）          ✅ git 追跡
+├── reports/
+│   └── {sub-issue-number}/
+│       ├── implement.md        iddue:start:worker が生成（完了シグナル + 実装サマリー）✅ git 追跡
+│       └── conflict.md         complete-task.sh が生成（コンフリクト解消時のみ）     ❌ ローカルのみ
+├── tasks/
+│   └── {sub-issue-number}/
+│       ├── judging.log         dispatch-unblocked.sh が出力（readiness 判定）       ❌ ローカルのみ
+│       └── worker.log          start-worker.sh が出力（デバッグ用）                 ❌ ローカルのみ
+└── escalation.yaml             オーケストレーターが exit 99 直前に書く              ❌ ローカルのみ
 ```
+
+---
+
+## ファイル所有権と git 管理方針
+
+| ファイル | 書き込み主体 | git 管理 | 備考 |
+|---------|------------|---------|------|
+| `config.yaml` | `iddue:setup-orchestration` | ✅ コミット | read-only。オーケストレーション開始前に確定 |
+| `status.yaml` | オーケストレーターのみ | ✅ コミット+push | 状態変化のたびに即コミット。再開可能性の根拠 |
+| `reports/{sub}/implement.md` | ワーカーのみ | ✅ コミット+push | `iddue/{sub}` ブランチへ。完了検知の唯一の手段 |
+| `escalation.yaml` | オーケストレーターのみ | ❌ ローカルのみ | exit 99 直前に書く。push する前に停止するため git 不要 |
+| `reports/{sub}/conflict.md` | オーケストレーターのみ | ❌ ローカルのみ | コンフリクト解消時のみ生成。デバッグ用途 |
+| `tasks/{sub}/judging.log` | オーケストレーターのみ | ❌ ローカルのみ | readiness チェックの stdout |
+| `tasks/{sub}/worker.log` | オーケストレーターのみ | ❌ ローカルのみ | ワーカープロセスの stdout |
+
+**所有権の原則:**
+- `status.yaml` はオーケストレーターのみが書く（ワーカーは読まない）
+- `implement.md` はワーカーのみが書く（オーケストレーターは読むだけ）
+- 両者が同一ファイルに書き込むケースはない
+
+---
+
+## `status.yaml` のコミットタイミング
+
+| タイミング | スクリプト |
+|-----------|----------|
+| ワーカー起動後（dispatch） | `dispatch-unblocked.sh` |
+| タスク完了後（1件ごと） | `complete-task.sh` |
+| 全完了・最終削除前 | `orchestrate.sh` |
+
+---
+
+## `.orchestrate/` の最終削除
+
+全タスク完了後、`.orchestrate/` ディレクトリを `git rm -r` で削除するコミットを追加する。最終 PR の diff に orchestration 管理ファイルが残らない。各ファイルの中間コミットは git history に残るため監査トレースは維持される。
 
 ---
 
@@ -67,23 +102,23 @@ failed_task: null
 このコミットがオーケストレーターの唯一の完了検知手段。
 
 ```bash
-git log --oneline origin/iddue/{sub} -- .iddue/orchestration/reports/{sub}/implement.md
+git log --oneline origin/iddue/{sub} -- .orchestrate/reports/{sub}/implement.md
 ```
 
 詳細: `.claude/skills/iddue:orchestration-development/templates/report-md.md`
 
 ### reports/{sub}/conflict.md — コンフリクト解消ログ（発生時のみ）
 
-`complete-task.sh` がコンフリクト解消成功後に `resolve-conflict.log` を移動して生成。
-コンフリクトが発生しなかった場合は存在しない。
+`complete-task.sh` がコンフリクト解消成功後に生成。
+コンフリクトが発生しなかった場合は存在しない。git 管理されないローカルファイル。
 
 ---
 
 ## ブランチ戦略
 
 ```
-develop
-  └── iddue/{parent}          メイン Issue ブランチ（メイン Issue PR → develop）
+main
+  └── iddue/{parent}          メイン Issue ブランチ（メイン Issue PR → main）
         ├── iddue/{sub1}      サブ Issue ブランチ（ワーカーが実装、orchestrate がマージ）
         ├── iddue/{sub2}      サブ Issue ブランチ
         └── iddue/{sub3}      サブ Issue ブランチ
@@ -93,7 +128,7 @@ develop
 - ワーカーが実装完了後 `iddue/{sub}` に commit+push
 - オーケストレーターが `iddue/{sub}` → `iddue/{parent}` へ `--no-ff` マージ
 - サブ Issue に個別 PR は作らない（ミニマム設計）
-- 最終的に `iddue/{parent}` のメイン Issue PR が develop にマージされる
+- 最終的に `iddue/{parent}` のメイン Issue PR が main にマージされる
 
 ---
 

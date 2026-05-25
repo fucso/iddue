@@ -5,14 +5,14 @@
 #
 # 終了コード:
 #   0: 全タスク正常完了
-#   99: エスカレーション要（.iddue/orchestration/escalation.yaml に詳細）
+#   99: エスカレーション要（.orchestrate/escalation.yaml に詳細）
 
 set -uo pipefail
 
 PARENT="${1:?Usage: $0 <parent-issue-number>}"
 SCRIPTS="$(cd "$(dirname "$0")" && pwd)"
 MAIN_BRANCH="iddue/${PARENT}"
-ESCALATION_FILE=".iddue/orchestration/escalation.yaml"
+ESCALATION_FILE=".orchestrate/escalation.yaml"
 
 REPO_ROOT=$(git -C "$SCRIPTS" rev-parse --show-toplevel)
 cd "$REPO_ROOT"
@@ -32,14 +32,14 @@ escalate() {
 
 # ── Phase 1: 初期化 ────────────────────────────────────────────────────────────
 
-if [ ! -f ".iddue/orchestration/config.yaml" ]; then
-  echo "Error: .iddue/orchestration/config.yaml が見つかりません。iddue:setup-orchestration を先に実行してください。" >&2
+if [ ! -f ".orchestrate/config.yaml" ]; then
+  echo "Error: .orchestrate/config.yaml が見つかりません。iddue:setup-orchestration を先に実行してください。" >&2
   exit 1
 fi
 
-if [ ! -f ".iddue/orchestration/status.yaml" ]; then
+if [ ! -f ".orchestrate/status.yaml" ]; then
   node "$SCRIPTS/tasks.js" init "$PARENT"
-  git add .iddue/orchestration/status.yaml
+  git add .orchestrate/status.yaml
   git commit -m "orchestration: initialize status.yaml for #${PARENT}"
   git push origin "$MAIN_BRANCH"
 fi
@@ -72,13 +72,13 @@ while true; do
         0) ;;
         2) escalate "before-merge-hook-aborted" \
              "sub=#${sub}" \
-             ".iddue/orchestration/tasks/${sub}/worker.log" ;;
+             ".orchestrate/tasks/${sub}/worker.log" ;;
         3) escalate "merge-failed" \
              "sub=#${sub}" \
-             ".iddue/orchestration/tasks/${sub}/worker.log" ;;
+             ".orchestrate/tasks/${sub}/worker.log" ;;
         5) escalate "conflict-resolution-failed" \
              "sub=#${sub}" \
-             ".iddue/orchestration/reports/${sub}/conflict.md" ;;
+             ".orchestrate/reports/${sub}/conflict.md" ;;
         *) escalate "complete-task-unexpected-error" \
              "sub=#${sub}, exit_code=${complete_exit}" ;;
       esac
@@ -100,12 +100,17 @@ FAILED_TASK=$(echo "$STATUS_OUT" | grep "^failed_task:" | grep -v "null" | awk '
 
 if [ -n "$FAILED_TASK" ]; then
   escalate "task-failed-during-execution" \
-    "failed_task=#${FAILED_TASK}, see .iddue/orchestration/status.yaml"
+    "failed_task=#${FAILED_TASK}, see .orchestrate/status.yaml"
 fi
 
 # status.yaml 最終コミット
-git add .iddue/orchestration/status.yaml
+git add .orchestrate/status.yaml
 git commit -m "orchestration: finalize #${PARENT}" 2>/dev/null || true
+git push origin "$MAIN_BRANCH"
+
+# .orchestrate/ を削除して最終 PR diff から除外
+git rm -r .orchestrate/
+git commit -m "orchestration: remove .orchestrate/ after completion of #${PARENT}"
 git push origin "$MAIN_BRANCH"
 
 # 定型レポート出力

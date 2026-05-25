@@ -37,7 +37,7 @@ fi
 while true; do
   while IFS=: read -r SUB PID; do
     [ -z "$SUB" ] && continue
-    REPORT=".iddue/orchestration/reports/${SUB}/implement.md"
+    REPORT=".orchestrate/reports/${SUB}/implement.md"
 
     if git log --oneline "iddue/${SUB}" -- "${REPORT}" 2>/dev/null | grep -q .; then
       echo "COMPLETED:${SUB}"

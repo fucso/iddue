@@ -13,7 +13,7 @@ argument-hint: "{親 Issue 番号}"
 
 **このスキルのゴール:**
 - メイン Issue ブランチ `iddue/{parent}` の作成と push
-- `.iddue/orchestration/config.yaml` の生成
+- `.orchestrate/config.yaml` の生成
 - メイン Issue PR の作成（ドラフト）
 - 各サブ Issue YAML に `parent.linked_pr.branch` を設定
 
@@ -91,7 +91,7 @@ bash .claude/skills/worktree-development/scripts/setup.sh "iddue/{parent}" {BASE
 Write ツールで以下のパスに直接書き出す:
 
 ```
-.worktree/iddue/{parent}/.iddue/orchestration/config.yaml
+.worktree/iddue/{parent}/.orchestrate/config.yaml
 ```
 
 内容は Phase 1 で iddue:fetch-issue から返された YAML を使用する。
