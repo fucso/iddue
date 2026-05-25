@@ -28,7 +28,9 @@ function parseYAML(content) {
   const result = {};
   let currentKey = null;
   let currentArray = null;
+  let currentArrayIndent = -1;
   let currentArrayItem = null;
+  let currentSubArrayProp = null;
 
   for (const line of lines) {
     if (line.trim() === '' || line.trim().startsWith('#')) continue;
@@ -41,7 +43,9 @@ function parseYAML(content) {
         currentKey = trimmed.slice(0, -1);
         result[currentKey] = undefined;
         currentArray = null;
+        currentArrayIndent = -1;
         currentArrayItem = null;
+        currentSubArrayProp = null;
       } else if (trimmed.includes(':')) {
         const colonIdx = trimmed.indexOf(':');
         const key = trimmed.slice(0, colonIdx).trim();
@@ -49,30 +53,46 @@ function parseYAML(content) {
         result[key] = parseValue(value);
         currentKey = key;
         currentArray = null;
+        currentArrayIndent = -1;
         currentArrayItem = null;
+        currentSubArrayProp = null;
       }
     } else if (trimmed.startsWith('- ')) {
-      if (!currentArray) {
-        currentArray = [];
-        result[currentKey] = currentArray;
-      }
-      const itemContent = trimmed.slice(2).trim();
-      if (itemContent.includes(':')) {
-        currentArrayItem = {};
-        const colonIdx = itemContent.indexOf(':');
-        const key = itemContent.slice(0, colonIdx).trim();
-        const value = itemContent.slice(colonIdx + 1).trim();
-        currentArrayItem[key] = parseValue(value);
-        currentArray.push(currentArrayItem);
+      if (currentArrayItem && currentSubArrayProp !== null && indent > currentArrayIndent) {
+        const itemContent = trimmed.slice(2).trim();
+        currentArrayItem[currentSubArrayProp].push(parseValue(itemContent));
       } else {
-        currentArray.push(parseValue(itemContent));
-        currentArrayItem = null;
+        if (!currentArray) {
+          currentArray = [];
+          result[currentKey] = currentArray;
+          currentArrayIndent = indent;
+        }
+        const itemContent = trimmed.slice(2).trim();
+        if (itemContent.includes(':')) {
+          currentSubArrayProp = null;
+          currentArrayItem = {};
+          const colonIdx = itemContent.indexOf(':');
+          const key = itemContent.slice(0, colonIdx).trim();
+          const value = itemContent.slice(colonIdx + 1).trim();
+          currentArrayItem[key] = parseValue(value);
+          currentArray.push(currentArrayItem);
+        } else {
+          currentArray.push(parseValue(itemContent));
+          currentArrayItem = null;
+          currentSubArrayProp = null;
+        }
       }
     } else if (currentArrayItem && trimmed.includes(':')) {
       const colonIdx = trimmed.indexOf(':');
       const key = trimmed.slice(0, colonIdx).trim();
       const value = trimmed.slice(colonIdx + 1).trim();
-      currentArrayItem[key] = parseValue(value);
+      if (value === '') {
+        currentSubArrayProp = key;
+        currentArrayItem[key] = [];
+      } else {
+        currentSubArrayProp = null;
+        currentArrayItem[key] = parseValue(value);
+      }
     }
   }
 
