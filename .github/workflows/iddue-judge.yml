@@ -2,11 +2,13 @@ name: iddue judge
 
 on:
   issues:
-    types: [labeled]
+    types: [opened, edited, labeled]
 
 jobs:
   judge:
-    if: github.event.label.name == 'iddue'
+    if: |
+      (github.event.action == 'labeled' && github.event.label.name == 'iddue') ||
+      (github.event.action != 'labeled' && contains(github.event.issue.labels.*.name, 'iddue'))
     runs-on: ubuntu-latest
     concurrency:
       group: iddue-judge-${{ github.event.issue.number }}

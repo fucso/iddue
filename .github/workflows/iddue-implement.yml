@@ -6,7 +6,9 @@ on:
 
 jobs:
   implement:
-    if: github.event.label.name == 'ready to implementation'
+    if: |
+      github.event.label.name == 'ready to implementation' &&
+      contains(github.event.issue.labels.*.name, 'iddue')
     runs-on: ubuntu-latest
     concurrency:
       group: iddue-implement-${{ github.event.issue.number }}
