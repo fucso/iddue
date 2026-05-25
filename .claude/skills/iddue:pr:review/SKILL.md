@@ -234,7 +234,7 @@ status.yaml を読み取り、全サブ Issue のステータスを確認する�
 
 | 分類 | 定義 | 扱い |
 |-----|------|-----|
-| CRITICAL | 修正が必要な問題 | → コメント投稿して cleanup → 終了（REQUEST_CHANGES） |
+| CRITICAL | 修正が必要な問題 | → コメント投稿して cleanup → 終了（COMMENT） |
 | WARNING | 人間レビュー時の注意喚起 | → レビュー OK コメントに付記（ブロックしない） |
 | INFO | 提案・参考情報 | → レビュー OK コメントに付記（ブロックしない） |
 
@@ -248,7 +248,7 @@ status.yaml を読み取り、全サブ Issue のステータスを確認する�
 このスキルが投稿するすべてのレビューコメント（本文・インライン）の先頭に `<!-- iddue:pr:review -->` を付与する。
 これにより次回レビュー時に `iddue:pr:check-feedback-resolution` がユーザー返信（異議コメント）を検出できる。
 
-### 4.1 REQUEST_CHANGES（CRITICAL あり）
+### 4.1 COMMENT（CRITICAL あり）
 
 問題箇所を diff の行に紐づけられる場合は inline コメントとして投稿する。
 インラインコメントの `body` にも `<!-- iddue:pr:review -->` を付与すること。
@@ -264,7 +264,7 @@ EOF
 echo "<!-- iddue:pr:review -->
 {観点ドキュメントのフォーマットに従ったサマリー本文}" | \
   bash .claude/skills/github-pr/scripts/post-review.sh \
-  {pr_info.number} {pr_info.headRefOid} REQUEST_CHANGES /tmp/review-comments.json
+  {pr_info.number} {pr_info.headRefOid} COMMENT /tmp/review-comments.json
 ```
 
 インライン紐づけが困難な問題（設計逸脱・要件未充足など）はインラインなしで投稿する：
@@ -273,7 +273,7 @@ echo "<!-- iddue:pr:review -->
 echo "<!-- iddue:pr:review -->
 {サマリー本文}" | \
   bash .claude/skills/github-pr/scripts/post-review.sh \
-  {pr_info.number} {pr_info.headRefOid} REQUEST_CHANGES
+  {pr_info.number} {pr_info.headRefOid} COMMENT
 ```
 
 ### 4.2 レビュー OK コメント（全観点 CRITICAL なし）

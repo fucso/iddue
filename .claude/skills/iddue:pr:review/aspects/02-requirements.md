@@ -29,7 +29,7 @@
 
 ## 判定基準
 
-### CRITICAL（フロー停止・REQUEST_CHANGES）
+### CRITICAL（フロー停止・COMMENT）
 
 親 Issue の「完了条件」「要件」「受け入れ基準」に **明示された** 項目が以下の状態にある場合：
 
@@ -75,7 +75,7 @@
 
 ### 問題あり（CRITICAL）
 
-`SKILL.md Phase 4.1` の REQUEST_CHANGES で投稿。
+`SKILL.md Phase 4.1` の COMMENT で投稿。
 要件が特定のコード箇所に紐づけられる場合はインラインコメントも付ける。
 
 **サマリー本文（`body`）:**

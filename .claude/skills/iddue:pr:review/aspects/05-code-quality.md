@@ -20,7 +20,7 @@
 
 ## 判定基準
 
-### CRITICAL（フロー停止・REQUEST_CHANGES）
+### CRITICAL（フロー停止・COMMENT）
 
 以下のいずれかに該当する場合：
 
@@ -71,7 +71,7 @@ CRITICAL な問題がない。
 
 ### 問題あり（CRITICAL）
 
-`SKILL.md Phase 4.1` の REQUEST_CHANGES で投稿。
+`SKILL.md Phase 4.1` の COMMENT で投稿。
 原則として問題箇所の diff 行へインラインコメントを付ける。
 
 **サマリー本文（`body`）:**
