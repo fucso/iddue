@@ -108,11 +108,6 @@ git add .orchestrate/status.yaml
 git commit -m "orchestration: finalize #${PARENT}" 2>/dev/null || true
 git push origin "$MAIN_BRANCH"
 
-# .orchestrate/ を削除して最終 PR diff から除外
-git rm -r .orchestrate/
-git commit -m "orchestration: remove .orchestrate/ after completion of #${PARENT}"
-git push origin "$MAIN_BRANCH"
-
 # 定型レポート出力
 bash "$SCRIPTS/report.sh" "$PARENT"
 exit 0

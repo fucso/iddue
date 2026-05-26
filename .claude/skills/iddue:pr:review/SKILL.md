@@ -295,6 +295,14 @@ echo "<!-- iddue:pr:review -->
 bash .claude/skills/github-pr/scripts/add-label.sh -h {pr_info.number} "iddue: review ok"
 ```
 
+**オーケストレーション PR の場合**（`sub_issues` が空でない）、`.orchestrate/` を削除して PR の最終 diff から除外する：
+
+```bash
+git -C .worktree/iddue-review/{parent} rm -r .orchestrate/
+bash .claude/skills/worktree-development/scripts/commit.sh "iddue-review/{parent}" "orchestration: remove .orchestrate/ after review ok of #{parent}"
+bash .claude/skills/worktree-development/scripts/push.sh "iddue-review/{parent}"
+```
+
 ### 4.3 COMMENT（CI pending 時のみ）
 
 ```bash

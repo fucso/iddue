@@ -52,7 +52,7 @@
 
 ## `.orchestrate/` の最終削除
 
-全タスク完了後、`.orchestrate/` ディレクトリを `git rm -r` で削除するコミットを追加する。最終 PR の diff に orchestration 管理ファイルが残らない。各ファイルの中間コミットは git history に残るため監査トレースは維持される。
+`iddue:pr:review` によるレビュー OK 判定後、`.orchestrate/` ディレクトリを `git rm -r` で削除するコミットを追加する。最終 PR の diff に orchestration 管理ファイルが残らない。各ファイルの中間コミットは git history に残るため監査トレースは維持される。
 
 ---
 
