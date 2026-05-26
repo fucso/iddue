@@ -21,7 +21,7 @@ cd "$REPO_ROOT"
 
 SUB_BRANCH="iddue/${SUB}"
 SCRIPTS_DIR="$(dirname "$0")"
-STATUS_FILE=".iddue/orchestration/status.yaml"
+STATUS_FILE=".orchestrate/status.yaml"
 BEFORE_MERGE_HOOK="${REPO_ROOT}/.claude/orchestration-hooks/before-merge.sh"
 
 # Step 1: before-merge フック（存在する場合のみ実行）
@@ -42,7 +42,7 @@ if ! git merge --no-ff "${SUB_BRANCH}" -m "Merge sub-issue #${SUB} into ${MAIN_I
     git merge --abort 2>/dev/null || true
     echo "Merge conflict in sub-issue #${SUB}. Launching conflict resolver..." >&2
 
-    CONFLICT_REPORT=".iddue/orchestration/reports/${SUB}/conflict.md"
+    CONFLICT_REPORT=".orchestrate/reports/${SUB}/conflict.md"
     mkdir -p "$(dirname "${CONFLICT_REPORT}")"
 
     # フォアグラウンドで起動（完了を待つ）
@@ -57,7 +57,6 @@ if ! git merge --no-ff "${SUB_BRANCH}" -m "Merge sub-issue #${SUB} into ${MAIN_I
         node "${SCRIPTS_DIR}/tasks.js" fail "${SUB}" "re-merge-failed"
         exit 3
       fi
-      git add "${CONFLICT_REPORT}"
     else
       echo "Error: Conflict resolution failed for sub-issue #${SUB}" >&2
       node "${SCRIPTS_DIR}/tasks.js" fail "${SUB}" "conflict-resolution-failed"
@@ -72,7 +71,7 @@ fi
 # Step 4: tasks.js で状態を complete に更新
 node "${SCRIPTS_DIR}/tasks.js" complete "${SUB}"
 
-# Step 5: status.yaml をコミット（conflict.md があれば git add 済み）
+# Step 5: status.yaml をコミット
 git add "${STATUS_FILE}"
 git commit -m "orchestration: complete sub-issue #${SUB}"
 

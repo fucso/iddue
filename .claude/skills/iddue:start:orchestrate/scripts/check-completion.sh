@@ -17,7 +17,7 @@ SCRIPTS="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT=$(git -C "$SCRIPTS" rev-parse --show-toplevel)
 cd "$REPO_ROOT"
 
-STATUS_YAML=".iddue/orchestration/status.yaml"
+STATUS_YAML=".orchestrate/status.yaml"
 
 if [ ! -f "$STATUS_YAML" ]; then
   echo "Error: $STATUS_YAML が見つかりません" >&2
@@ -34,4 +34,4 @@ if [ "$STATUS" != "completed" ] || [ "$PENDING_COUNT" -gt 0 ] || [ "$FAILED" != 
 fi
 
 # 完了タスクの report.md パスを出力（存在するもののみ）
-find ".iddue/orchestration/reports" -name "implement.md" -type f 2>/dev/null | sort || true
+find ".orchestrate/reports" -name "implement.md" -type f 2>/dev/null | sort || true

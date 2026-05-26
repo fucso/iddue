@@ -108,7 +108,7 @@ bash .claude/skills/worktree-development/scripts/commit.sh "iddue/{sub}" "{commi
 `iddue:orchestration-development/templates/report-md.md` のフォーマットに従い、worktree 内に以下のファイルを作成する：
 
 ```
-.worktree/iddue/{sub}/.iddue/orchestration/reports/{sub}/implement.md
+.worktree/iddue/{sub}/.orchestrate/reports/{sub}/implement.md
 ```
 
 品質チェックセクションには Step 4 で保存した一時ファイルの内容を転記する：
@@ -146,7 +146,7 @@ bash .claude/skills/worktree-development/scripts/cleanup.sh "iddue/{sub}"
 
 どの Step でも回復不能なエラーが発生した場合：
 
-1. worktree 内に `.iddue/orchestration/reports/{sub}.md` を作成（ステータス: `failed`、エラー詳細を記録）
+1. worktree 内に `.orchestrate/reports/{sub}.md` を作成（ステータス: `failed`、エラー詳細を記録）
 2. `commit.sh "iddue/{sub}" "report: sub-issue #${sub} failed"` でコミットしてオーケストレーターに通知
 3. `cleanup.sh "iddue/{sub}"` で worktree を削除
 4. 終了

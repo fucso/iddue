@@ -6,7 +6,7 @@
 ## ファイルパス
 
 ```
-.iddue/orchestration/reports/{sub-issue-number}/implement.md
+.orchestrate/reports/{sub-issue-number}/implement.md
 ```
 
 ## 役割

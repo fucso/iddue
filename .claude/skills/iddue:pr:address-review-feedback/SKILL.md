@@ -85,7 +85,7 @@ bash .claude/skills/worktree-development/scripts/setup.sh "iddue-review/{parent}
 ```
 
 **オーケストレーション PR の場合**（`sub_issues` が空でない）、`Read` ツールで以下を読み取る：
-- `.worktree/iddue-review/{parent}/.iddue/orchestration/reports/{sub}/implement.md`
+- `.worktree/iddue-review/{parent}/.orchestrate/reports/{sub}/implement.md`
 - `.worktree/iddue-review/{parent}/.iddue/issue/{parent}.yaml`（存在する場合）
 
 ### 1.6 コンフリクトチェックと解消

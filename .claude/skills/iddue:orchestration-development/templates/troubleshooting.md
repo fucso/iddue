@@ -7,7 +7,7 @@
 ### config.yaml が見つからない
 
 ```
-Config file not found: .iddue/orchestration/config.yaml
+Config file not found: .orchestrate/config.yaml
 ```
 
 **原因:** `iddue:setup-orchestration` が完了していない。
@@ -24,14 +24,14 @@ Config file not found: .iddue/orchestration/config.yaml
 
 ```bash
 git fetch origin "iddue/{parent}"
-git log --oneline "origin/iddue/{parent}" -- .iddue/orchestration/status.yaml
+git log --oneline "origin/iddue/{parent}" -- .orchestrate/status.yaml
 ```
 
 コミット履歴がない場合は status.yaml を手動でコミット：
 
 ```bash
 git checkout "iddue/{parent}"
-git add .iddue/orchestration/status.yaml
+git add .orchestrate/status.yaml
 git commit -m "orchestration: recover status.yaml"
 git push origin "iddue/{parent}"
 ```
@@ -64,7 +64,7 @@ git push origin "iddue/{parent}"
 
 1. ログを確認：
    ```bash
-   cat .iddue/orchestration/tasks/{sub}/worker.log
+   cat .orchestrate/tasks/{sub}/worker.log
    ```
 
 2. エラー内容を確認して再実行を検討：
@@ -108,7 +108,7 @@ force-with-lease で解消しない場合はオーケストレーターに報告
 **確認:**
 
 ```bash
-git log --oneline "origin/iddue/{sub}" -- .iddue/orchestration/reports/{sub}/implement.md
+git log --oneline "origin/iddue/{sub}" -- .orchestrate/reports/{sub}/implement.md
 ```
 
 コミットがない場合はワーカーの worker.log を確認し、Step 6 を手動で再実行。
@@ -123,7 +123,7 @@ git log --oneline "origin/iddue/{sub}" -- .iddue/orchestration/reports/{sub}/imp
 
 ```bash
 node .claude/skills/iddue:start:orchestrate/scripts/tasks.js complete {sub}
-git add .iddue/orchestration/status.yaml
+git add .orchestrate/status.yaml
 git commit -m "orchestration: manually complete #${sub}"
 git push origin "iddue/{parent}"
 ```
@@ -134,7 +134,7 @@ git push origin "iddue/{parent}"
 
 ```bash
 node .claude/skills/iddue:start:orchestrate/scripts/tasks.js skip {sub}
-git add .iddue/orchestration/status.yaml
+git add .orchestrate/status.yaml
 git commit -m "orchestration: skip #${sub}"
 git push origin "iddue/{parent}"
 ```

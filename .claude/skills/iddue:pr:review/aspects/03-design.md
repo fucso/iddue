@@ -24,8 +24,8 @@ Issue に定義された設計（スコープ・対象ファイル・インタ�
 
 | データ | 参照元 |
 |--------|--------|
-| config.yaml | worktree: `.worktree/iddue-review/{parent}/.iddue/orchestration/config.yaml` |
-| 各サブ `implement.md` | worktree: `.worktree/iddue-review/{parent}/.iddue/orchestration/reports/{sub}/implement.md` |
+| config.yaml | worktree: `.worktree/iddue-review/{parent}/.orchestrate/config.yaml` |
+| 各サブ `implement.md` | worktree: `.worktree/iddue-review/{parent}/.orchestrate/reports/{sub}/implement.md` |
 | 変更後のソースコード全体 | worktree: `.worktree/iddue-review/{parent}/{変更ファイルパス}` |
 | 変更内容（差分） | Phase 2 で取得した `gh pr diff` の出力 |
 | 各サブ Issue 本文 | Phase 2 で取得済み |

@@ -47,7 +47,7 @@ issue_title() {
 while IFS= read -r SUB; do
   [ -z "$SUB" ] && continue
 
-  LOG_DIR=".iddue/orchestration/tasks/${SUB}"
+  LOG_DIR=".orchestrate/tasks/${SUB}"
   mkdir -p "$LOG_DIR"
   JUDGING_LOG="${LOG_DIR}/judging.log"
 
@@ -71,7 +71,7 @@ while IFS= read -r SUB; do
 done <<< "$UNBLOCKED"
 
 if [ "$STATUS_CHANGED" = "true" ]; then
-  git add .iddue/orchestration/status.yaml
+  git add .orchestrate/status.yaml
   git commit -m "orchestration: dispatch unblocked tasks for #${PARENT_ISSUE_NUMBER} (workers: ${DISPATCHED})"
 fi
 

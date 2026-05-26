@@ -14,7 +14,7 @@
 | 変更後の実装コード全体 | worktree: `.worktree/iddue-review/{parent}/{変更ファイルパス}` |
 | 関連する未変更ファイル | worktree から必要に応じて `Read`（呼び出し元・継承元・関連クラス等） |
 | 変更内容（差分） | Phase 2 で取得した `gh pr diff` の出力（変更箇所の特定に使用） |
-| 各サブ `implement.md` | worktree: `.worktree/iddue-review/{parent}/.iddue/orchestration/reports/{sub}/implement.md`（実装意図・handoff_notes） |
+| 各サブ `implement.md` | worktree: `.worktree/iddue-review/{parent}/.orchestrate/reports/{sub}/implement.md`（実装意図・handoff_notes） |
 
 ---
 

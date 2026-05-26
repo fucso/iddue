@@ -5,7 +5,7 @@
 ## ファイルパス
 
 ```
-.iddue/orchestration/config.yaml
+.orchestrate/config.yaml
 ```
 
 ## スキーマ

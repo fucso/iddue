@@ -19,7 +19,7 @@ SETUP_BRANCH="${2:?Usage: $0 <sub-issue-number> <setup-branch>}"
 REPO_ROOT=$(git -C "$(dirname "$0")" rev-parse --show-toplevel)
 cd "$REPO_ROOT"
 
-LOG_DIR=".iddue/orchestration/tasks/${SUB}"
+LOG_DIR=".orchestrate/tasks/${SUB}"
 mkdir -p "$LOG_DIR" || {
   echo "Error: Failed to create log directory: ${LOG_DIR}" >&2
   exit 2

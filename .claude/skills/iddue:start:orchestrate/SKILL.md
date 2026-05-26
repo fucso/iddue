@@ -34,7 +34,7 @@ argument-hint: "{親 Issue 番号}"
 `iddue:start` からサブ Issue 検出時に自動デリゲートされる。
 
 **前提条件（`iddue:setup-orchestration` で準備済み）:**
-- `.iddue/orchestration/config.yaml` が存在する
+- `.orchestrate/config.yaml` が存在する
 - メイン Issue ブランチ `iddue/{parent}` が存在する
 
 ---
@@ -43,7 +43,7 @@ argument-hint: "{親 Issue 番号}"
 
 ### Phase 1: 前提確認
 
-`.iddue/orchestration/config.yaml` が存在するか確認する。
+`.orchestrate/config.yaml` が存在するか確認する。
 存在しない場合はエラーを表示して終了し、`iddue:setup-orchestration` を案内する。
 
 ---
@@ -88,7 +88,7 @@ bash .claude/skills/iddue:start:orchestrate/scripts/check-completion.sh {parent}
 | 資料 | 内容 |
 |------|------|
 | `.iddue/issue/{parent}.yaml` | 親 Issue の元設計・要件 |
-| `.iddue/orchestration/config.yaml` | タスク定義と依存グラフ |
+| `.orchestrate/config.yaml` | タスク定義と依存グラフ |
 | Step 1 で出力された各 `report.md` | ワーカーの実装報告 |
 
 **逸脱と判定する例:**
@@ -138,7 +138,7 @@ echo "PR ドラフト解除: $PR_URL"
 
 **`orchestrate_exit = 99`（エスカレーション）**
 
-`.iddue/orchestration/escalation.yaml` を読み、原因を分析する：
+`.orchestrate/escalation.yaml` を読み、原因を分析する：
 
 ```yaml
 reason: "{理由}"
