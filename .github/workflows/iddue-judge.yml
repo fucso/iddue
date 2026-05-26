@@ -1,0 +1,25 @@
+name: iddue judge
+
+on:
+  issues:
+    types: [opened, edited, labeled]
+
+jobs:
+  judge:
+    if: |
+      (github.event.action == 'labeled' && github.event.label.name == 'iddue') ||
+      (github.event.action != 'labeled' && contains(github.event.issue.labels.*.name, 'iddue'))
+    runs-on: ubuntu-latest
+    concurrency:
+      group: iddue-judge-${{ github.event.issue.number }}
+      cancel-in-progress: true
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: anthropics/claude-code-action@v1
+        with:
+          prompt: "/iddue:judging-ready-to-implementation ${{ github.event.issue.number }}"
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ secrets.GITHUB_PAT }}

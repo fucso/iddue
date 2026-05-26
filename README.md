@@ -9,6 +9,32 @@ GitHub Issues を起点とした開発ワークフローを Claude Code 上で�
 - [gh CLI](https://cli.github.com/) — GitHub との通信に使用します。インストール後、`gh auth login` で認証してください
 - [Claude Code CLI](https://claude.ai/code) — スキルの実行環境です。`.claude/` を利用したいリポジトリにコピーして使用します
 
+## GitHub Actions による自動化
+
+`.github/workflows/` に含まれるワークフローを使うと、Issue へのラベル付与だけで実装から PR レビュー対応までを自動実行できます。
+
+### 必要な Secrets
+
+リポジトリの **Settings → Secrets and variables → Actions** に以下を登録してください。
+
+| Secret 名 | 内容 |
+|-----------|------|
+| `ANTHROPIC_API_KEY` | Anthropic API キー |
+| `GITHUB_PAT` | GitHub PAT（`repo` / `issues` / `pull_requests` スコープ付き）|
+
+`GITHUB_PAT` に通常の `GITHUB_TOKEN` ではなく PAT を使う理由は、判定ワークフローが付与したラベルで実装ワークフローを連鎖トリガーするためです（`GITHUB_TOKEN` によるイベントは別ワークフローをトリガーしません）。
+
+### 自動化フロー
+
+```
+Issue に iddue ラベル付与
+  → 実装可否判定（iddue-judge.yml）
+    → 判定 OK → ready to implementation ラベルを付与
+      → 実装・PR 作成（iddue-implement.yml）
+        → PR レビュー（iddue-review.yml / push ごとに自動実行）
+          → フィードバック対応（iddue-address.yml / レビュー投稿を検知）
+```
+
 ## スキル
 
 ### Issue を起票する

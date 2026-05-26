@@ -1,0 +1,43 @@
+name: iddue implement
+
+on:
+  issues:
+    types: [labeled]
+
+jobs:
+  implement:
+    if: |
+      github.event.label.name == 'ready to implementation' &&
+      contains(github.event.issue.labels.*.name, 'iddue')
+    runs-on: ubuntu-latest
+    concurrency:
+      group: iddue-implement-${{ github.event.issue.number }}
+      cancel-in-progress: false
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check for sub-issues
+        id: sub-issues
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          COUNT=$(gh api graphql -f query='
+            query($owner:String!,$repo:String!,$number:Int!){
+              repository(owner:$owner,name:$repo){
+                issue(number:$number){ subIssues{ totalCount } }
+              }
+            }' \
+            -F owner="${{ github.repository_owner }}" \
+            -F repo="${{ github.event.repository.name }}" \
+            -F number="${{ github.event.issue.number }}" \
+            --jq '.data.repository.issue.subIssues.totalCount')
+          echo "exists=$([ "${COUNT:-0}" -gt 0 ] && echo true || echo false)" >> $GITHUB_OUTPUT
+      - uses: anthropics/claude-code-action@v1
+        if: steps.sub-issues.outputs.exists == 'false'
+        with:
+          prompt: "/iddue:start ${{ github.event.issue.number }}"
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ secrets.GITHUB_PAT }}
